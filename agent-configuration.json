@@ -1,0 +1,275 @@
+{
+  "agent_name": "Visual Documentation Agent",
+  "version": "1.0.0",
+  "description": "Transforms technical guides into visually appealing, easy-to-read formats with diagrams, flowcharts, and structured layouts",
+  "capabilities": {
+    "visual_generation": {
+      "diagrams": ["architecture", "flowchart", "sequence", "state", "er", "network", "timeline"],
+      "formats": ["mermaid", "plantuml", "graphviz", "svg"],
+      "output_types": ["markdown", "html", "pdf", "png", "svg"]
+    },
+    "formatting": {
+      "typography": {
+        "heading_levels": 6,
+        "font_suggestions": ["Inter", "Roboto", "system-ui"],
+        "code_font": ["Fira Code", "JetBrains Mono", "Consolas"]
+      },
+      "spacing": {
+        "section_padding": "3rem",
+        "card_padding": "1.5rem",
+        "element_gap": "1rem",
+        "line_height": 1.6
+      },
+      "colors": {
+        "primary": "#2196F3",
+        "secondary": "#4CAF50",
+        "accent": "#FF9800",
+        "error": "#f44336",
+        "neutral": "#607D8B",
+        "background": "#FFFFFF",
+        "surface": "#F5F5F5"
+      }
+    },
+    "content_structuring": {
+      "components": [
+        "hero_section",
+        "quick_overview",
+        "table_of_contents",
+        "learning_objectives",
+        "system_architecture",
+        "component_gallery",
+        "circuit_diagrams",
+        "code_examples",
+        "step_by_step_guide",
+        "troubleshooting",
+        "next_steps"
+      ],
+      "special_elements": [
+        "callout_boxes",
+        "comparison_tables",
+        "icon_lists",
+        "expandable_sections",
+        "progress_checklists",
+        "pro_tips",
+        "warning_alerts"
+      ]
+    },
+    "iot_specific": {
+      "diagrams": [
+        "system_architecture",
+        "data_flow",
+        "pinout_diagrams",
+        "connection_schematics",
+        "network_topology"
+      ],
+      "components": [
+        "hardware_specifications",
+        "wiring_guides",
+        "sensor_calibration",
+        "power_requirements",
+        "communication_protocols"
+      ]
+    }
+  },
+  "tools": {
+    "primary": [
+      {
+        "name": "Mermaid.js",
+        "purpose": "Diagram generation",
+        "types": ["flowchart", "sequence", "class", "state", "er", "gantt", "journey", "timeline"],
+        "documentation": "https://mermaid.js.org/intro/"
+      },
+      {
+        "name": "Markdown",
+        "purpose": "Content formatting",
+        "features": ["headers", "tables", "code_blocks", "lists", "blockquotes", "links"],
+        "extensions": ["admonitions", "task_lists", "definition_lists"]
+      },
+      {
+        "name": "HTML/CSS",
+        "purpose": "Custom styling and interactivity",
+        "features": ["responsive_layouts", "animations", "transitions"]
+      }
+    ],
+    "supporting": [
+      {
+        "name": "PlantUML",
+        "purpose": "Alternative diagram generation"
+      },
+      {
+        "name": "Graphviz (DOT)",
+        "purpose": "Network diagrams"
+      },
+      {
+        "name": "Kroki",
+        "purpose": "Diagram rendering service"
+      },
+      {
+        "name": "D3.js",
+        "purpose": "Interactive data visualizations"
+      },
+      {
+        "name": "Chart.js",
+        "purpose": "Statistical charts"
+      }
+    ]
+  },
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "Analyze Content",
+        "actions": [
+          "Identify key concepts and components",
+          "Extract technical specifications",
+          "Map data flows and interactions",
+          "Determine target audience level"
+        ]
+      },
+      {
+        "step": 2,
+        "name": "Design Visual Structure",
+        "actions": [
+          "Create system architecture diagrams",
+          "Design component relationship maps",
+          "Plan data flow visualizations",
+          "Structure content hierarchy"
+        ]
+      },
+      {
+        "step": 3,
+        "name": "Generate Diagrams",
+        "actions": [
+          "Create architecture diagrams with Mermaid",
+          "Build flowcharts for processes",
+          "Design sequence diagrams for interactions",
+          "Generate state diagrams for system states"
+        ]
+      },
+      {
+        "step": 4,
+        "name": "Format Content",
+        "actions": [
+          "Apply visual hierarchy",
+          "Add typography and spacing",
+          "Insert comparison tables",
+          "Create step-by-step guides"
+        ]
+      },
+      {
+        "step": 5,
+        "name": "Enhance Learning",
+        "actions": [
+          "Add code annotations",
+          "Include pro tips and warnings",
+          "Create troubleshooting guides",
+          "Add visual learning aids"
+        ]
+      },
+      {
+        "step": 6,
+        "name": "Review & Optimize",
+        "actions": [
+          "Check accessibility (contrast, alt text)",
+          "Verify diagram accuracy",
+          "Test readability",
+          "Optimize for different outputs"
+        ]
+      }
+    ]
+  },
+  "output_formats": {
+    "markdown": {
+      "extension": ".md",
+      "use_case": "Version control, universal compatibility",
+      "renderers": ["GitHub", "GitLab", "Bitbucket", "Notion"]
+    },
+    "html": {
+      "extension": ".html",
+      "use_case": "Web deployment, interactivity",
+      "features": ["responsive", "interactive_diagrams", "animations"]
+    },
+    "pdf": {
+      "extension": ".pdf",
+      "use_case": "Print, fixed layout documentation",
+      "generator": "Pandoc, wkhtmltopdf"
+    },
+    "notion": {
+      "platform": "Notion",
+      "use_case": "Collaborative documentation",
+      "api": "Notion API"
+    },
+    "confluence": {
+      "platform": "Atlassian Confluence",
+      "use_case": "Enterprise documentation",
+      "format": "Storage format"
+    }
+  },
+  "integration_points": {
+    "version_control": {
+      "git_friendly": true,
+      "diff_review": true,
+      "change_tracking": true
+    },
+    "cms": [
+      "WordPress REST API",
+      "Ghost API",
+      "Contentful API",
+      "Notion API"
+    ],
+    "design_tools": [
+      "Figma",
+      "Sketch",
+      "Adobe XD"
+    ],
+    "analytics": {
+      "reading_time": true,
+      "section_engagement": true,
+      "user_feedback": true
+    }
+  },
+  "best_practices": {
+    "diagrams": {
+      "consistency": "Use consistent colors for similar components",
+      "legends": "Add legends for complex diagrams",
+      "labels": "Keep text labels short and clear",
+      "types": "Use appropriate diagram types for content",
+      "accessibility": "Ensure color contrast and screen reader support"
+    },
+    "content": {
+      "progression": "Use progressive disclosure",
+      "modalities": "Provide multiple learning modalities",
+      "examples": "Include real-world examples",
+      "checkpoints": "Add checkpoints for understanding"
+    },
+    "typography": {
+      "hierarchy": "Proper heading hierarchy (H1-H4)",
+      "emphasis": "Use bold sparingly for emphasis",
+      "italics": "Use italics for definitions or terms",
+      "line_length": "Optimal line length: 60-80 characters"
+    },
+    "accessibility": {
+      "alt_text": "Alt text for all images",
+      "heading_order": "Proper heading hierarchy",
+      "contrast": "Color contrast ratios ≥ 4.5:1",
+      "keyboard": "Keyboard navigation support",
+      "screen_reader": "Screen reader compatibility"
+    }
+  },
+  "performance": {
+    "optimization": [
+      "Image optimization (WebP, lazy loading)",
+      "Diagram caching",
+      "Progressive loading",
+      "Mobile responsiveness",
+      "Print-friendly styles"
+    ]
+  },
+  "metadata": {
+    "created": "2026-01-05",
+    "author": "Visual Documentation Agent",
+    "license": "MIT",
+    "category": "Documentation",
+    "tags": ["IoT", "documentation", "diagrams", "visual", "technical-writing"]
+  }
+}

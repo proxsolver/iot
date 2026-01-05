@@ -1,0 +1,331 @@
+{
+  "keywordResearch": {
+    "niche": "IoT Projects - Arduino, LoRaWAN, Computer Vision",
+    "lastUpdated": "2025-01-05",
+    "researchDate": "2025-01-05",
+    "topics": {
+      "arduinoNiclaVision": {
+        "primaryKeywords": [
+          "Arduino Nicla Vision tutorial",
+          "Nicla Vision projects",
+          "Arduino Nicla Vision guide"
+        ],
+        "secondaryKeywords": [
+          "Arduino camera module",
+          "Edge ML Arduino",
+          "TinyML Arduino",
+          "Arduino computer vision",
+          "Nicla Vision setup",
+          "Arduino vision sensor",
+          "MicroPython camera",
+          "Arduino image recognition"
+        ],
+        "longTailKeywords": [
+          "how to use Arduino Nicla Vision",
+          "Arduino Nicla Vision object detection tutorial",
+          "Nicla Vision face recognition project",
+          "Arduino Nicla Vision vs ESP32-CAM",
+          "Arduino Nicla Vision machine learning examples",
+          "Arduino Nicla Vision code examples",
+          "Nicla Vision battery powered projects",
+          "Arduino Nicla Vision WiFi configuration"
+        ],
+        "lsiKeywords": [
+          "image sensor",
+          "person detection",
+          "edge impulse",
+          "Arduino cloud",
+          "low power IoT",
+          "computer vision board",
+          "HM01B0 camera",
+          "nano 33 ble sense"
+        ],
+        "searchIntent": "educational",
+        "difficulty": "medium",
+        "volume": "1K-10K searches/month",
+        "trending": "increasing - Edge AI and TinyML growing rapidly"
+      },
+      "arduinoNiclaSenseMe": {
+        "primaryKeywords": [
+          "Arduino Nicla Sense Me tutorial",
+          "Nicla Sense Me projects",
+          "Arduino environmental monitoring"
+        ],
+        "secondaryKeywords": [
+          "Arduino BSEC library",
+          "Arduino air quality sensor",
+          "Nicla Sense Me datasheet",
+          "Arduino 4D sensor",
+          "Arduino temperature humidity sensor",
+          "Arduino indoor air quality",
+          "Nicla Sense Me BLE",
+          "Arduino environmental sensor board"
+        ],
+        "longTailKeywords": [
+          "how to use Arduino Nicla Sense Me",
+          "Arduino Nicla Sense Me BSEC setup",
+          "Nicla Sense Me IoT projects",
+          "Arduino air quality monitoring system",
+          "Nicla Sense Me vs BME688",
+          "Arduino indoor air quality monitor",
+          "Nicla Sense Matter Arduino Cloud",
+          "Arduino environmental data logging"
+        ],
+        "lsiKeywords": [
+          "BME688 sensor",
+          "BSEC algorithm",
+          "gas sensor",
+          "pressure sensor",
+          "temperature humidity",
+          "air quality index",
+          "environmental sensing",
+          "IoT sensor node"
+        ],
+        "searchIntent": "educational",
+        "difficulty": "medium-low",
+        "volume": "1K-10K searches/month",
+        "trending": "stable - Environmental monitoring consistently popular"
+      },
+      "lorawanCommunication": {
+        "primaryKeywords": [
+          "LoRaWAN tutorial",
+          "LoRaWAN Arduino",
+          "LoRaWAN projects"
+        ],
+        "secondaryKeywords": [
+          "LoRa vs LoRaWAN",
+          "LoRaWAN gateway setup",
+          "Arduino LoRa module",
+          "LoRaWAN frequency bands",
+          "LoRaWAN network server",
+          "LoRaWAN for IoT",
+          "LoRaWAN range",
+          "LoRaWAN security"
+        ],
+        "longTailKeywords": [
+          "how to build LoRaWAN network",
+          "LoRaWAN Arduino project tutorial",
+          "LoRaWAN gateway setup guide",
+          "Arduino LoRaWAN temperature sensor",
+          "LoRaWAN with The Things Network",
+          "LoRaWAN end device setup",
+          "Arduino LoRaWAN communication example",
+          "LoRaWAN outdoor sensor network"
+        ],
+        "lsiKeywords": [
+          "long range communication",
+          "low power wide area network",
+          "LPWAN",
+          "sub-GHz",
+          "RFM95 module",
+          "SX1276",
+          "The Things Network",
+          "ChirpStack",
+          "IoT connectivity"
+        ],
+        "searchIntent": "educational",
+        "difficulty": "medium",
+        "volume": "10K-100K searches/month",
+        "trending": "growing - LPWAN and IoT connectivity increasing"
+      },
+      "computerVisionIoT": {
+        "primaryKeywords": [
+          "computer vision IoT",
+          "IoT camera projects",
+          "edge AI IoT"
+        ],
+        "secondaryKeywords": [
+          "TinyML IoT",
+          "edge computing IoT",
+          "IoT image recognition",
+          "machine learning IoT",
+          "AIoT projects",
+          "smart camera IoT",
+          "IoT object detection",
+          "embedded computer vision"
+        ],
+        "longTailKeywords": [
+          "how to implement computer vision in IoT",
+          "edge AI vs cloud AI IoT",
+          "IoT camera with object detection",
+          "TinyML Arduino projects",
+          "computer vision at the edge tutorial",
+          "AIoT project ideas",
+          "IoT smart camera build",
+          "embedded ML for IoT"
+        ],
+        "lsiKeywords": [
+          "TensorFlow Lite Micro",
+          "Edge Impulse",
+          "neural network",
+          "model optimization",
+          "inference at edge",
+          "ML on microcontrollers",
+          "smart IoT",
+          "intelligent edge"
+        ],
+        "searchIntent": "educational",
+        "difficulty": "medium-high",
+        "volume": "1K-10K searches/month",
+        "trending": "rapidly growing - Edge AI exploding in popularity"
+      },
+      "environmentalMonitoring": {
+        "primaryKeywords": [
+          "environmental monitoring IoT",
+          "IoT weather station",
+          "air quality monitoring system"
+        ],
+        "secondaryKeywords": [
+          "IoT sensor network",
+          "environmental data logger",
+          "smart environmental monitoring",
+          "IoT temperature monitoring",
+          "wireless sensor network",
+          "IoT agriculture monitoring",
+          "indoor air quality IoT",
+          "environmental dashboard"
+        ],
+        "longTailKeywords": [
+          "how to build IoT environmental monitoring system",
+          "Arduino air quality monitor tutorial",
+          "IoT weather station project guide",
+          "environmental monitoring with LoRaWAN",
+          "smart home air quality sensor",
+          "IoT greenhouse monitoring system",
+          "Arduino environmental sensor project",
+          "build your own air quality monitor"
+        ],
+        "lsiKeywords": [
+          "data visualization",
+          "real-time monitoring",
+          "sensor fusion",
+          "cloud platform",
+          "time series database",
+          "dashboard",
+          "alert system",
+          "data analytics",
+          "sustainable IoT"
+        ],
+        "searchIntent": "educational",
+        "difficulty": "medium",
+        "volume": "10K-100K searches/month",
+        "trending": "growing - Climate and health awareness driving interest"
+      }
+    },
+    "keywordStrategy": {
+      "primaryFocus": "Target 'how-to' and 'tutorial' keywords for high intent traffic",
+      "contentPillars": [
+        {
+          "pillar": "Arduino Nicla Series Complete Guide",
+          "clusterTopics": [
+            "Nicla Vision Getting Started",
+            "Nicla Vision Camera Projects",
+            "Nicla Vision Machine Learning",
+            "Nicla Sense Me Setup",
+            "Nicla Sense Me Air Quality",
+            "Nicla Sense Me IoT Integration"
+          ]
+        },
+        {
+          "pillar": "LoRaWAN for IoT Projects",
+          "clusterTopics": [
+            "LoRaWAN Basics Tutorial",
+            "LoRaWAN Hardware Selection",
+            "LoRaWAN Network Setup",
+            "LoRaWAN with The Things Network",
+            "LoRaWAN Security Best Practices",
+            "LoRaWAN Real-world Projects"
+          ]
+        },
+        {
+          "pillar": "Edge AI for IoT",
+          "clusterTopics": [
+            "Introduction to TinyML",
+            "Computer Vision on Microcontrollers",
+            "TensorFlow Lite Micro Tutorial",
+            "Edge Impulse for IoT",
+            "Optimizing ML Models for Edge",
+            "Edge AI vs Cloud AI"
+          ]
+        }
+      ],
+      "seasonalTrends": {
+        "peakSeasons": [
+          "August-October: Back-to-school and academic projects",
+          "January-March: New year, new projects",
+          "May-June: Summer IoT and maker projects"
+        ],
+        "evergreenContent": [
+          "Getting started tutorials",
+          "Hardware setup guides",
+          "Basic programming examples",
+          "Troubleshooting guides"
+        ]
+      },
+      "competitorAnalysis": {
+        "opportunities": [
+          "Limited content on Arduino Nicla series - first-mover advantage",
+          "Few practical LoRaWAN project tutorials - fill the gap",
+          "Edge AI IoT content growing but still limited opportunity",
+          "Combination tutorials (e.g., LoRaWAN + environmental monitoring) underserved"
+        ],
+        "gaps": [
+          "Complete end-to-end project tutorials",
+          "Real-world application case studies",
+          "Performance optimization guides",
+          "Integration tutorials (multiple sensors/protocols)"
+        ]
+      }
+    },
+    "recommendedBlogPosts": [
+      {
+        "title": "Complete Guide to Arduino Nicla Vision: Setup, Camera, and ML",
+        "primaryKeyword": "Arduino Nicla Vision tutorial",
+        "targetLength": "2500+ words",
+        "difficulty": "beginner-intermediate",
+        "estimatedSearchVolume": "1K-10K",
+        "priority": "high"
+      },
+      {
+        "title": "Building a LoRaWAN Weather Station with Arduino",
+        "primaryKeyword": "LoRaWAN Arduino project",
+        "targetLength": "2000+ words",
+        "difficulty": "intermediate",
+        "estimatedSearchVolume": "5K-50K",
+        "priority": "high"
+      },
+      {
+        "title": "Air Quality Monitoring System with Arduino Nicla Sense Me",
+        "primaryKeyword": "Arduino environmental monitoring",
+        "targetLength": "2500+ words",
+        "difficulty": "beginner",
+        "estimatedSearchVolume": "1K-10K",
+        "priority": "high"
+      },
+      {
+        "title": "Computer Vision on Edge: TinyML with Arduino Nicla Vision",
+        "primaryKeyword": "TinyML Arduino tutorial",
+        "targetLength": "3000+ words",
+        "difficulty": "intermediate-advanced",
+        "estimatedSearchVolume": "1K-10K",
+        "priority": "medium"
+      },
+      {
+        "title": "LoRaWAN vs WiFi vs BLE: Choosing the Right IoT Protocol",
+        "primaryKeyword": "LoRaWAN vs WiFi",
+        "targetLength": "2000+ words",
+        "difficulty": "beginner",
+        "estimatedSearchVolume": "10K-100K",
+        "priority": "medium"
+      },
+      {
+        "title": "Environmental Monitoring Dashboard: IoT Data Visualization",
+        "primaryKeyword": "IoT environmental monitoring",
+        "targetLength": "2500+ words",
+        "difficulty": "intermediate",
+        "estimatedSearchVolume": "5K-50K",
+        "priority": "medium"
+      }
+    ]
+  }
+}

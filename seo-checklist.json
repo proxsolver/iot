@@ -1,0 +1,303 @@
+{
+  "seoChecklist": {
+    "title": "SEO Checklist for Technical IoT Tutorials",
+    "lastUpdated": "2025-01-05",
+    "categories": [
+      {
+        "category": "Title Optimization",
+        "items": [
+          {
+            "task": "Title length between 50-60 characters",
+            "priority": "high",
+            "check": "title.length >= 50 && title.length <= 60"
+          },
+          {
+            "task": "Include primary keyword in title",
+            "priority": "high",
+            "check": "title.includes(primaryKeyword)"
+          },
+          {
+            "task": "Make title compelling and actionable",
+            "priority": "medium",
+            "check": "Has action verb and specific outcome"
+          },
+          {
+            "task": "Avoid clickbait or misleading titles",
+            "priority": "high",
+            "check": "Title accurately reflects content"
+          }
+        ]
+      },
+      {
+        "category": "Meta Information",
+        "items": [
+          {
+            "task": "Meta description 150-160 characters",
+            "priority": "high",
+            "check": "metaDescription.length >= 150 && metaDescription.length <= 160"
+          },
+          {
+            "task": "Include primary keyword in meta description",
+            "priority": "high",
+            "check": "metaDescription.includes(primaryKeyword)"
+          },
+          {
+            "task": "Add compelling value proposition",
+            "priority": "medium",
+            "check": "Meta description promises specific benefit"
+          },
+          {
+            "task": "Include call-to-action in meta description",
+            "priority": "medium",
+            "check": "Meta description has CTA"
+          }
+        ]
+      },
+      {
+        "category": "Content Structure",
+        "items": [
+          {
+            "task": "Single H1 heading with main title",
+            "priority": "high",
+            "check": "One H1 tag present"
+          },
+          {
+            "task": "Logical H2 heading hierarchy",
+            "priority": "high",
+            "check": "At least 3 H2 headings"
+          },
+          {
+            "task": "Use H3 for subsections",
+            "priority": "medium",
+            "check": "H3 headings nested under H2"
+          },
+          {
+            "task": "Include keywords in headings naturally",
+            "priority": "medium",
+            "check": "At least 2 headings contain keywords"
+          },
+          {
+            "task": "Content length 1500+ words for comprehensive guides",
+            "priority": "medium",
+            "check": "wordCount >= 1500"
+          },
+          {
+            "task": "Short paragraphs (3-4 sentences)",
+            "priority": "medium",
+            "check": "Most paragraphs under 100 words"
+          }
+        ]
+      },
+      {
+        "category": "Technical Content Quality",
+        "items": [
+          {
+            "task": "Include code examples with syntax highlighting",
+            "priority": "high",
+            "check": "Code blocks present and formatted"
+          },
+          {
+            "task": "Specify hardware/software versions",
+            "priority": "high",
+            "check": "Version numbers mentioned"
+          },
+          {
+            "task": "List all required components/libraries",
+            "priority": "high",
+            "check": "Requirements section present"
+          },
+          {
+            "task": "Include wiring diagrams or schematics",
+            "priority": "medium",
+            "check": "Visual diagrams included"
+          },
+          {
+            "task": "Add troubleshooting section",
+            "priority": "medium",
+            "check": "Common issues addressed"
+          },
+          {
+            "task": "Provide links to official documentation",
+            "priority": "medium",
+            "check": "Reference links present"
+          },
+          {
+            "task": "Include photos/screenshots of setup",
+            "priority": "medium",
+            "check": "Visual proof included"
+          }
+        ]
+      },
+      {
+        "category": "Keyword Optimization",
+        "items": [
+          {
+            "task": "Primary keyword density 0.5-2.5%",
+            "priority": "high",
+            "check": "keywordDensity >= 0.5 && keywordDensity <= 2.5"
+          },
+          {
+            "task": "Include secondary keywords naturally",
+            "priority": "medium",
+            "check": "At least 3 secondary keywords used"
+          },
+          {
+            "task": "Use long-tail keywords in subheadings",
+            "priority": "medium",
+            "check": "Long-tail phrases in H2/H3"
+          },
+          {
+            "task": "Keyword in first 100 words",
+            "priority": "high",
+            "check": "Primary keyword in introduction"
+          },
+          {
+            "task": "Avoid keyword stuffing",
+            "priority": "high",
+            "check": "Natural keyword usage"
+          }
+        ]
+      },
+      {
+        "category": "Readability",
+        "items": [
+          {
+            "task": "Flesch score 60+ (easy to read)",
+            "priority": "medium",
+            "check": "fleschScore >= 60"
+          },
+          {
+            "task": "Average sentence length 15-20 words",
+            "priority": "medium",
+            "check": "avgSentenceLength <= 20"
+          },
+          {
+            "task": "Use bullet points for lists",
+            "priority": "low",
+            "check": "Bullet or numbered lists present"
+          },
+          {
+            "task": "Define technical terms",
+            "priority": "medium",
+            "check": "Technical terms explained"
+          },
+          {
+            "task": "Use active voice",
+            "priority": "low",
+            "check": "Passive voice minimized"
+          }
+        ]
+      },
+      {
+        "category": "Media and Visuals",
+        "items": [
+          {
+            "task": "Include relevant images",
+            "priority": "medium",
+            "check": "At least 3 images"
+          },
+          {
+            "task": "Optimize image alt text with keywords",
+            "priority": "high",
+            "check": "All images have descriptive alt text"
+          },
+          {
+            "task": "Compress images for web",
+            "priority": "medium",
+            "check": "Image file size optimized"
+          },
+          {
+            "task": "Use descriptive file names",
+            "priority": "medium",
+            "check": "File names describe content (e.g., arduino-nicla-vision-setup.jpg)"
+          }
+        ]
+      },
+      {
+        "category": "Internal & External Links",
+        "items": [
+          {
+            "task": "Link to related tutorials",
+            "priority": "medium",
+            "check": "Internal links present"
+          },
+          {
+            "task": "Link to official documentation",
+            "priority": "high",
+            "check": "External authority links present"
+          },
+          {
+            "task": "Use descriptive anchor text",
+            "priority": "medium",
+            "check": "Links have meaningful text"
+          },
+          {
+            "task": "Open external links in new tab",
+            "priority": "low",
+            "check": "target=\"_blank\" on external links"
+          }
+        ]
+      },
+      {
+        "category": "Schema Markup",
+        "items": [
+          {
+            "task": "Add Article schema markup",
+            "priority": "medium",
+            "check": "JSON-LD schema present"
+          },
+          {
+            "task": "Add HowTo schema for tutorials",
+            "priority": "medium",
+            "check": "HowTo schema included"
+          },
+          {
+            "task": "Include BreadcrumbList schema",
+            "priority": "low",
+            "check": "Breadcrumb schema present"
+          },
+          {
+            "task": "Add FAQ schema if applicable",
+            "priority": "low",
+            "check": "FAQPage schema included"
+          }
+        ]
+      },
+      {
+        "category": "Technical SEO",
+        "items": [
+          {
+            "task": "URL is short and descriptive",
+            "priority": "high",
+            "check": "URL contains keywords"
+          },
+          {
+            "task": "Use hyphens in URL",
+            "priority": "high",
+            "check": "URL uses hyphens not underscores"
+          },
+          {
+            "task": "Include canonical URL",
+            "priority": "high",
+            "check": "Canonical tag present"
+          },
+          {
+            "task": "Open Graph tags for social sharing",
+            "priority": "medium",
+            "check": "OG tags complete"
+          },
+          {
+            "task": "Twitter Card meta tags",
+            "priority": "medium",
+            "check": "Twitter card tags present"
+          },
+          {
+            "task": "Mobile-responsive design",
+            "priority": "high",
+            "check": "Content readable on mobile"
+          }
+        ]
+      }
+    ]
+  }
+}

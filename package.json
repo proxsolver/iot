@@ -1,0 +1,33 @@
+{
+  "name": "seo-technical-blog-agent",
+  "version": "1.0.0",
+  "description": "SEO-optimized blog content agent for technical IoT tutorials",
+  "main": "seo-blog-agent.js",
+  "scripts": {
+    "test": "node example-usage.js",
+    "analyze": "node seo-blog-agent.js",
+    "start": "node example-usage.js"
+  },
+  "keywords": [
+    "SEO",
+    "blog",
+    "technical-writing",
+    "IoT",
+    "Arduino",
+    "LoRaWAN",
+    "content-optimization",
+    "keyword-research",
+    "technical-tutorials"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/seo-technical-blog-agent.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}

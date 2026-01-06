@@ -3,251 +3,1289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT 프로젝트 데이터 대시보드</title>
+    <title>IoT 프로젝트 데이터 뷰어</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
             min-height: 100vh;
-            padding: 20px;
-        }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1 { color: white; text-align: center; margin-bottom: 10px; font-size: 2rem; }
-        .subtitle { color: rgba(255,255,255,0.8); text-align: center; margin-bottom: 30px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .tab {
-            padding: 12px 24px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-        .tab:hover { background: rgba(255,255,255,0.3); }
-        .tab.active { background: white; color: #667eea; font-weight: bold; }
-        .content {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-        .card-title {
-            font-size: 1.3rem;
-            color: #333;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-        }
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        .info-item {
-            background: white;
             padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
         }
-        .info-label { font-size: 0.85rem; color: #666; margin-bottom: 5px; }
-        .info-value { font-size: 1.1rem; color: #333; font-weight: 500; }
-        .keyword-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-        .keyword {
-            background: #e3e8ff;
-            color: #4c51bf;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-        .blog-post {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #4CAF50;
-        }
-        .blog-title { font-weight: bold; color: #333; margin-bottom: 8px; }
-        .blog-meta { display: flex; gap: 15px; font-size: 0.9rem; color: #666; flex-wrap: wrap; }
-        .priority-high { border-left-color: #f44336; }
-        .priority-medium { border-left-color: #FF9800; }
-        .file-list { list-style: none; }
-        .file-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 8px;
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-        .file-name { font-weight: 500; color: #333; }
-        .file-size { color: #666; font-size: 0.9rem; }
-        .welcome-section { text-align: center; padding: 40px 20px; }
-        .welcome-section h2 { color: #667eea; margin-bottom: 20px; }
-        .welcome-section p { color: #666; line-height: 1.8; margin-bottom: 15px; }
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+        .header h1 { color: white; font-size: 1.5rem; }
+        .header .search-box { display: flex; gap: 10px; }
+        .search-box input {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            width: 250px;
+            font-size: 0.9rem;
         }
-        .feature-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
+        .main-layout { display: flex; gap: 20px; }
+        .sidebar {
+            flex: 0 0 280px;
+            background: rgba(255,255,255,0.95);
             border-radius: 15px;
+            padding: 20px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        .content-area {
+            flex: 1;
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            max-height: calc(100vh - 150px);
+            overflow-y: auto;
+        }
+        .content-area::-webkit-scrollbar { width: 8px; }
+        .content-area::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        .sidebar h3 { color: #333; margin-bottom: 15px; font-size: 1.1rem; border-bottom: 2px solid #2d5a87; padding-bottom: 10px; }
+        .file-tree { list-style: none; }
+        .file-item {
+            padding: 10px 12px;
+            margin: 3px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .file-item:hover { background: #e8f4f8; }
+        .file-item.active { background: #2d5a87; color: white; }
+        .file-icon { opacity: 0.7; }
+        .content-title { color: #2d5a87; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #2d5a87; }
+        .content-body { line-height: 1.8; color: #333; }
+        .content-body h1 { color: #2d5a87; margin: 25px 0 15px; }
+        .content-body h2 { color: #3d7ab7; margin: 20px 0 12px; }
+        .content-body h3 { color: #5d9ad7; margin: 15px 0 10px; }
+        .content-body p { margin-bottom: 12px; }
+        .content-body ul, .content-body ol { margin: 10px 0 10px 25px; }
+        .content-body li { margin: 5px 0; }
+        .content-body code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-family: 'Monaco', 'Consolas', monospace; font-size: 0.9em; }
+        .content-body pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .content-body pre code { background: none; padding: 0; }
+        .content-body table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        .content-body th, .content-body td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        .content-body th { background: #2d5a87; color: white; }
+        .content-body blockquote {
+            border-left: 4px solid #2d5a87;
+            padding-left: 15px;
+            margin: 15px 0;
+            color: #666;
+            font-style: italic;
+        }
+        .welcome-card {
+            background: linear-gradient(135deg, #2d5a87 0%, #1e3a5f 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .welcome-card h2 { margin-bottom: 15px; }
+        .info-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .info-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
         }
-        .feature-icon { font-size: 3rem; margin-bottom: 15px; }
-        .feature-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; }
-        .help-text {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background: #667eea; color: white; font-weight: 500; }
-        tr:hover { background: #f5f5f5; }
+        .info-card .icon { font-size: 2.5rem; margin-bottom: 10px; }
+        .info-card .label { font-size: 0.9rem; opacity: 0.9; }
         .badge {
             display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 500;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            margin-left: auto;
         }
-        .badge-success { background: #d4edda; color: #155724; }
-        .badge-warning { background: #fff3cd; color: #856404; }
-        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-md { background: #ffc107; color: #333; }
+        .badge-json { background: #4caf50; color: white; }
+        .badge-py { background: #3776ab; color: white; }
+        .badge-js { background: #f7df1e; color: #333; }
+        .no-file { text-align: center; padding: 50px; color: #666; }
+        .no-file .icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
+        @media (max-width: 900px) {
+            .main-layout { flex-direction: column; }
+            .sidebar { max-height: 300px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>IoT 프로젝트 데이터 대시보드</h1>
-        <p class="subtitle">쉽고 빠르게 프로젝트 데이터를 확인하세요</p>
-
-        <div class="tabs">
-            <button class="tab active" onclick="showTab('welcome')">홈</button>
-            <button class="tab" onclick="showTab('keywords')">키워드</button>
-            <button class="tab" onclick="showTab('blog')">블로그 주제</button>
-            <button class="tab" onclick="showTab('files')">파일</button>
-            <button class="tab" onclick="showTab('summary')">요약</button>
+        <div class="header">
+            <h1> IoT 프로젝트 데이터 뷰어</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="파일 또는 내용 검색..." onkeyup="handleSearch()">
+            </div>
         </div>
 
-        <div class="content">
-            <div id="welcome" class="tab-content active">
-                <div class="welcome-section">
-                    <h2>환영합니다!</h2>
-                    <p>이 대시보드는 IoT 멀티 센서 프로젝트의 모든 데이터를 쉽게 볼 수 있도록 만들어졌습니다.</p>
-                    <p>위의 탭을 클릭해서 원하는 정보를 확인하세요.</p>
-                    <div class="feature-grid">
-                        <div class="feature-card">
-                            <div class="feature-icon"></div>
-                            <div class="feature-title">Nicla Vision</div>
-                            <div>카메라 & AI 객체 감지</div>
+        <div class="main-layout">
+            <div class="sidebar">
+                <h3>📁 파일 목록</h3>
+                <ul class="file-tree" id="fileTree"></ul>
+            </div>
+
+            <div class="content-area" id="contentArea">
+                <div class="welcome-card">
+                    <h2>👋 환영합니다!</h2>
+                    <p>왼쪽에서 파일을 선택하면 내용을 볼 수 있습니다.</p>
+                    <p>검색창에 원하는 단어를 입력해서 찾을 수도 있어요!</p>
+                    
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <div class="icon">📷</div>
+                            <div><strong>Nicla Vision</strong></div>
+                            <div class="label">카메라 & AI</div>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon"></div>
-                            <div class="feature-title">Nicla Sense Me</div>
-                            <div>온도, 습도, 공기질 센서</div>
+                        <div class="info-card">
+                            <div class="icon">🌡️</div>
+                            <div><strong>Nicla Sense Me</strong></div>
+                            <div class="label">환경 센서</div>
                         </div>
-                        <div class="feature-card">
-                            <div class="feature-icon"></div>
-                            <div class="feature-title">LoRaWAN</div>
-                            <div>장거리 무선 통신 (10km)</div>
+                        <div class="info-card">
+                            <div class="icon">📡</div>
+                            <div><strong>MKR WAN 1310</strong></div>
+                            <div class="label">LoRaWAN</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="icon">📊</div>
+                            <div><strong>SEO 데이터</strong></div>
+                            <div class="label">키워드 분석</div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div id="keywords" class="tab-content"><div id="keywords-data"></div></div>
-
-            <div id="blog" class="tab-content"><div id="blog-data"></div></div>
-
-            <div id="files" class="tab-content">
-                <h3 style="margin-bottom: 20px; color: #333;">프로젝트 파일 목록</h3>
-                <ul class="file-list">
-                    <li class="file-item"><span class="file-name">IOT_PLANNING_README.md</span><span class="file-size">메인 가이드</span></li>
-                    <li class="file-item"><span class="file-name">phase-1-foundation.md</span><span class="file-size">1-2주차 계획</span></li>
-                    <li class="file-item"><span class="file-name">architecture-diagrams.md</span><span class="file-size">시스템 아키텍처</span></li>
-                    <li class="file-item"><span class="file-name">arduino-code-examples.md</span><span class="file-size">코드 예제</span></li>
-                    <li class="file-item"><span class="file-name">quick-reference.md</span><span class="file-size">빠른 참조</span></li>
-                    <li class="file-item"><span class="file-name">iot-keyword-research.json</span><span class="file-size">키워드 데이터</span></li>
-                    <li class="file-item"><span class="file-name">agent-configuration.json</span><span class="file-size">에이전트 설정</span></li>
-                </ul>
-            </div>
-
-            <div id="summary" class="tab-content">
-                <h3 style="margin-bottom: 20px; color: #333;">프로젝트 개요</h3>
-                <div class="card">
-                    <h4 class="card-title">프로젝트 목표</h4>
-                    <p style="color: #666; line-height: 1.8;">Arduino 기반의 IoT 멀티 센서 시스템을 구축하여 환경 모니터링과 객체 감지 기능을 구현합니다.</p>
-                </div>
-                <div class="card">
-                    <h4 class="card-title">하드웨어 구성</h4>
-                    <table>
-                        <tr><th>구성품</th><th>수량</th><th>용도</th></tr>
-                        <tr><td>Arduino Nicla Vision</td><td>2개</td><td>카메라, 객체 감지 (AI)</td></tr>
-                        <tr><td>Arduino Nicla Sense Me</td><td>1개</td><td>온도, 습도, 공기질 센서</td></tr>
-                        <tr><td>Arduino MKR WAN 1310</td><td>1개</td><td>LoRaWAN 통신</td></tr>
-                    </table>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function showTab(tabId) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById(tabId).classList.add('active');
+const fileData = {
+    "IOT_PLANNING_README.md": {
+        icon: "📖",
+        badge: "메인 가이드",
+        badgeClass: "badge-md",
+        content: `# Arduino IoT Planning Agent - 완전 가이드
+
+## 📋 이 프로젝트는 무엇인가요?
+
+Arduino 하드웨어를 사용한 정교한 IoT 프로젝트 구축을 위한 **완전한 계획 프레임워크**입니다.
+
+### 구성 요소
+
+- **2x Arduino Nicla Vision** - 듀얼 카메라 (객체 감지, 알람 기능)
+- **1x Arduino Nicla Sense Me** - 환경 센싱 (온도, 습도, 압력)
+- **1x Arduino MKR WAN 1310** - LoRaWAN 장거리 통신 + WiFi OTA 업데이트
+
+### 만들 수 있는 것
+
+✅ 듀얼 존 비주얼 모니터링 (사람, 차량, 동물 감지)
+✅ 고정확도 환경 모니터링
+✅ LoRaWAN을 통한 10km 장거리 통신
+✅ 실시간 클라우드 대시보드
+✅ WiFi를 통한 원격 펌웨어 업데이트
+✅ 로컬 알람 및 알림
+✅ 필드 배포용 배터리 최적화
+
+---
+
+## 📚 문서 파일
+
+| 파일 | 용도 | 언제 사용 |
+|------|---------|-------------|
+| \`phase-1-foundation.md\` | 1-2주차 상세 가이드 | **시작하기** - 프로젝트 시작 |
+| \`architecture-diagrams.md\` | 시스템 아키텍처 | 구조 이해하기 |
+| \`quick-reference.md\` | 빠른 참조 | 개발 및 디버깅 시 |
+| \`project-requirements.md\` | 시스템 요구사항 | 프로젝트 범위 이해 |
+| \`phase-2-4-overview.md\` | 10주 로드맵 | 전체 타임라인 계획 |
+
+---
+
+## 🎯 시스템 개요
+
+### 고레벨 아키텍처
+
+\`\`\`
+Nicla Vision #1 ──┐
+(감지)           ├──> MKR WAN 1310 ──> LoRa 게이트웨이 ──> 클라우드
+                 │      (허브)
+Nicla Vision #2 ──┤      (데이터
+(감지)           │       집계)
+                 │
+Nicla Sense Me ──┘
+(환경)
+\`\`\`
+
+### 주요 기능
+
+**비전 서브시스템:**
+- Edge ML을 사용한 실시간 객체 감지
+- 감지: 사람, 차량, 동물
+- 감지 시 로컬 LED 알람
+- 480x480 RGB565 카메라 해상도
+- 15-30 FPS 처리 속도
+
+**환경 서브시스템:**
+- 온도: -40 ~ 85°C (±0.5°C 정확도)
+- 습도: 0-100% RH (±2% 정확도)
+- 압력: 300-1100 hPa
+- 가스/VOC 감지
+- 저전력 동작 (1mA 슬립)
+
+**통신 서브시스템:**
+- LoRaWAN: 최대 10km 범위
+- WiFi: OTA 펌웨어 업데이트용
+- Serial: 보드 간 통신
+- MQTT: 클라우드 연동
+
+---
+
+## 🚀 빠른 시작
+
+### 절대 초보자를 위한 가이드
+
+**1단계**: Arduino IDE 2.0 설치
+- [arduino.cc](https://www.arduino.cc/en/software)에서 다운로드
+
+**2단계**: 문서 읽기
+- \`quick-reference.md\` - 기본 개념 숙지
+- \`architecture-diagrams.md\` - 시스템 시각화
+- \`phase-1-foundation.md\` - 빌딩 시작
+
+**예상 시간**: 전체 시스템 완료까지 10주
+
+---
+
+## 📖 프로젝트 단계
+
+### Phase 1: 기초 (1-2주차)
+**목표**: 환경 설정 및 개별 보드 테스트
+
+**성공 기준**:
+- 모든 보드에 코드 컴파일 및 업로드 가능
+- 온도, 습도, 압력 읽기 가능
+- 카메라로 이미지 캡처 가능
+- The Things Network에 LoRa 메시지 전송 가능
+
+### Phase 2: 멀티 보드 통신 (3-4주차)
+**목표**: 모든 보드 간 신뢰할 수 있는 통신 구축
+
+**성공 기준**:
+- 모든 보드가 신뢰할 수 있게 통신
+- 데이터 집계가 정상 작동
+- 통신 신뢰성 >95%
+
+### Phase 3: LoRaWAN 통합 (5-6주차)
+**목표**: 장거리 통신 및 클라우드 대시보드 구현
+
+**성공 기준**:
+- LoRaWAN을 통해 데이터 성공적으로 전송
+- 대시보드에 실시간 데이터 표시
+- 감지 이벤트가 2초 이내에 나타남
+
+### Phase 4: WiFi 및 OTA 업데이트 (7주차)
+**목표**: WiFi를 통한 원격 펌웨어 업데이트 활성화
+
+**성공 기준**:
+- MKR WAN 1310의 WiFi 연결
+- OTA 업데이트 메커니즘 작동
+- 안전한 펌웨어 검증`
+    },
+    "phase-1-foundation.md": {
+        icon: "📋",
+        badge: "1-2주차",
+        badgeClass: "badge-md",
+        content: `# Phase 1: 기초와 싱글 보드 기본
+
+## 개요
+
+**기간**: 2주 (14일)
+**난이도**: 초급자
+**전제조건**: 기본 C/C++ 지식, Arduino IDE 설치됨
+
+**단계 목표**: 개발 환경 설정, 개별 보드 기능 이해, 각 보드에서 개별적으로 기본 기능 구현
+
+---
+
+## 학습 목표
+
+이 단계를 완료하면 다음을 할 수 있습니다:
+- Nicla Vision, Nicla Sense Me, MKR WAN 1310용 Arduino IDE 설정
+- 각 보드에 펌웨어 작성 및 업로드
+- Nicla Sense Me에서 센서 데이터 읽기
+- Nicla Vision에서 이미지 캡처 및 기본 비전 처리
+- MKR WAN 1310에서 LoRa 통신 구성
+- Serial Monitor로 코드 디버깅
+- 기본 전력 관리 구현
+
+---
+
+## Week 1: 환경 설정 및 Nicla Sense Me
+
+### Day 1-2: Arduino IDE 설정 및 보드 구성
+
+#### 작업 1.1: Arduino IDE 2.0 설치
+1. [arduino.cc](https://www.arduino.cc/en/software)에서 다운로드
+2. 운영체제용으로 설치 (Windows/Mac/Linux)
+3. Arduino IDE 실행 및 설치 확인
+
+#### 작업 1.2: 보드 지원 패키지 추가
+
+**Nicla Vision용**:
+\`\`\`
+Tools → Board → Boards Manager → "Arduino mbed OS Nano Boards" 검색 → 설치
+\`\`\`
+
+**Nicla Sense Me용**:
+\`\`\`
+Tools → Board → Boards Manager → "Arduino nRF528x Boards (Mbed OS)" 검색 → 설치
+\`\`\`
+
+**MKR WAN 1310용**:
+\`\`\`
+Tools → Board → Boards Manager → "Arduino SAMD Boards" 검색 → 설치
+\`\`\`
+
+#### 작업 1.3: 필수 라이브러리 설치
+
+**모든 보드용**:
+- \`Arduino_JSON\` by Benoit Blanchon
+- \`Arduino_LowPower\` by Arduino
+
+**Nicla Vision용**:
+- \`Arduino_AdvancedFFT\` (모션 감지용)
+- \`TensorFlowLite\` (ML 모델용)
+
+**Nicla Sense Me용**:
+- \`Arduino_BHY2\` by Arduino (센서용)
+
+**MKR WAN 1310용**:
+- \`MKRWAN\` by Arduino (LoRaWAN용)
+- \`WiFiNINA\` by Arduino (WiFi용)
+
+---
+
+### Day 3-5: Nicla Sense Me - 환경 센싱
+
+#### 작업 1.4: 첫 번째 스케치 - 온도 읽기
+
+**하드웨어 설정**:
+- USB-C 케이블로 Nicla Sense Me 연결
+- 전원 표시 녹색 LED 확인
+
+**코드**: \`nicla_sense_basics.ino\`
+
+\`\`\`cpp
+#include <Arduino_BHY2.h>
+
+// 센서 객체
+SensorTemperature temperature(SENSOR_ID_TEMP);
+SensorHumidity humidity(SENSOR_ID_HUM);
+SensorPressure pressure(SENSOR_ID_BARO);
+
+void setup() {
+  Serial.begin(115200);
+  while (!Serial);
+
+  Serial.println("Nicla Sense Me - 환경 센싱");
+  Serial.println("========================================");
+
+  // 센서 초기화
+  BHY2.begin();
+  temperature.begin();
+  humidity.begin();
+  pressure.begin();
+
+  Serial.println("센서 초기화 완료!");
+}
+
+void loop() {
+  // 센서 값 업데이트
+  BHY2.update();
+
+  // 온도 읽기
+  float tempC = temperature.value();
+  float tempF = (tempC * 9/5) + 32;
+
+  // 습도 읽기
+  float hum = humidity.value();
+
+  // 압력 읽기
+  float pres = pressure.value();
+
+  // 결과 출력
+  Serial.println("────────────────────────────────────────");
+  Serial.print("온도: ");
+  Serial.print(tempC);
+  Serial.print(" °C (");
+  Serial.print(tempF);
+  Serial.println(" °F)");
+
+  Serial.print("습도: ");
+  Serial.print(hum);
+  Serial.println(" %");
+
+  Serial.print("압력: ");
+  Serial.print(pres);
+  Serial.println(" hPa");
+
+  delay(1000);
+}
+\`\`\`
+
+**성공 기준**:
+- [ ] 시리얼 모니터에 온도가 표시됨
+- [ ] 습도 값이 정상적으로 표시됨
+- [ ] 압력 값이 정상적으로 표시됨`
+    },
+    "quick-reference.md": {
+        icon: "🔍",
+        badge: "참조",
+        badgeClass: "badge-md",
+        content: `# IoT Planning Agent - 빠른 참조 가이드
+
+## 에이전트 기능 개요
+
+이 IoT Planning Agent는 다음을 사용한 Arduino 기반 IoT 시스템 구축을 위한 전문 도우미입니다:
+- **Nicla Vision** (객체 감지용 듀얼 카메라)
+- **Nicla Sense Me** (환경 센싱)
+- **MKR WAN 1310** (LoRaWAN + WiFi 통신)
+
+---
+
+## 에이전트 사용법
+
+### 새 프로젝트 시작
+
+**에이전트에게 말하기**:
+1. IoT 프로젝트 아이디어/비전
+2. 사용 가능한 하드웨어 또는 예산
+3. 기술 수준 (초급/중급/고급)
+4. 타임라인 요구사항
+5. 특정 목표 또는 제약조건
+
+**예시 프롬프트**:
+\`\`\`
+2개의 카메라로 내 재산을 모니터링하는 보안 시스템을 만들고 싶어요.
+Nicla Vision, Nicla Sense Me, MKR WAN 1310 보드가 있습니다.
+기본 C++ 지식이 있는 초보자입니다.
+8주 안에 작동하게 만들어야 해요.
+\`\`\`
+
+---
+
+## 프로젝트 구조 개요
+
+### 완전한 시스템 (10주 계획)
+
+\`\`\`
+멀티 센서 IoT 모니터링 시스템
+├─ Phase 1: 기초 (1-2주)
+│  ├─ 환경 설정
+│  ├─ 개별 보드 테스트
+│  └─ 기본 센서/비전/LoRa 기능
+│
+├─ Phase 2: 통신 (3-4주)
+│  ├─ 물리적 보드 연결
+│  ├─ Serial 통신 프로토콜
+│  └─ MKR WAN의 데이터 집계
+│
+├─ Phase 3: LoRaWAN 통합 (5-6주)
+│  ├─ The Things Network 설정
+│  ├─ MQTT 통합
+│  └─ 실시간 웹 대시보드
+│
+└─ Phase 4: WiFi 및 OTA (7-10주)
+   ├─ WiFi 설정
+   ├─ OTA 업데이트
+   └─ 배포 및 최적화
+\`\`\`
+
+---
+
+## 하드웨어 사양
+
+### Nicla Vision
+- **마이크로컨트롤러**: nRF52840 (64MHz)
+- **메모리**: 1MB Flash, 256KB RAM
+- **카메라**: HM01B0 (480x480 RGB565)
+- **AI**: Edge ML 지원 (TinyML)
+- **전력**: 활성 ~40mA, 슬립 ~1mA
+
+### Nicla Sense Me
+- **마이크로컨트롤러**: nRF52832 (64MHz)
+- **메모리**: 512KB Flash, 64KB RAM
+- **센서**: BME688 (온/습/압/가스)
+- **정확도**: ±0.5°C, ±2% RH
+- **전력**: 활성 ~15mA, 슬립 ~1mA
+
+### MKR WAN 1310
+- **마이크로컨트롤러**: SAMD21 (48MHz)
+- **메모리**: 256KB Flash, 32KB RAM
+- **LoRa**: Murata module (EU868/US915)
+- **WiFi**: u-blox NINA-W10
+- **전력**: 활성 ~35mA, 슬립 ~5µA
+
+---
+
+## 일반적인 명령어
+
+### Arduino IDE
+\`\`\`bash
+# 보드 매니저 열기
+Tools → Board → Boards Manager
+
+# 라이브러리 매니저 열기
+Sketch → Include Library → Manage Libraries
+
+# 시리얼 모니터 열기
+Tools → Serial Monitor (또는 Ctrl+Shift+M)
+\`\`\`
+
+### Serial 통신 속도
+\`\`\`
+Nicla Vision:    115200 baud
+Nicla Sense Me:  115200 baud
+MKR WAN 1310:    9600 baud (기본)
+\`\`\`
+
+### I2C 주소
+\`\`\`
+Nicla Vision:    0x2F (OV7255), 0x3D (HM01B0)
+Nicla Sense Me:  0x76 (BME688)
+MKR WAN 1310:    0x11 (LoRa module)
+\`\`\``
+    },
+    "iot-keyword-research.json": {
+        icon: "🔑",
+        badge: "키워드",
+        badgeClass: "badge-json",
+        content: `# IoT 키워드 연구 데이터
+
+## 니치: IoT Projects - Arduino, LoRaWAN, Computer Vision
+
+### 주제별 검색 데이터
+
+#### 1. Arduino Nicla Vision
+- **주요 키워드**: Arduino Nicla Vision tutorial, Nicla Vision projects, Arduino Nicla Vision guide
+- **검색량**: 1K-10K/월
+- **난이도**: 보통
+- **트렌드**: 증가중
+
+#### 2. Arduino Nicla Sense Me
+- **주요 키워드**: Arduino Nicla Sense Me tutorial, Nicla Sense Me projects, Arduino environmental monitoring
+- **검색량**: 1K-10K/월
+- **난이도**: 낮음
+- **트렌드**: 안정적
+
+#### 3. LoRaWAN 통신
+- **주요 키워드**: LoRaWAN tutorial, LoRaWAN Arduino, LoRaWAN projects
+- **검색량**: 10K-100K/월
+- **난이도**: 보통
+- **트렌드**: 성장중
+
+#### 4. 컴퓨터 비전 IoT
+- **주요 키워드**: computer vision IoT, IoT camera projects, edge AI IoT
+- **검색량**: 1K-10K/월
+- **난이도**: 높음
+- **트렌드**: 급성장
+
+#### 5. 환경 모니터링
+- **주요 키워드**: environmental monitoring IoT, IoT weather station, air quality monitoring system
+- **검색량**: 10K-100K/월
+- **난이도**: 보통
+- **트렌드**: 성장중
+
+---
+
+## 추천 블로그 주제
+
+| 제목 | 주요 키워드 | 길이 | 난이도 | 검색량 | 우선순위 |
+|------|------------|------|--------|--------|----------|
+| Arduino Nicla Vision 완전 가이드 | Nicla Vision tutorial | 2500+ | 초급-중급 | 1K-10K | 높음 |
+| LoRaWAN 날씨 스테이션 만들기 | LoRaWAN project | 2000+ | 중급 | 5K-50K | 높음 |
+| 공기질 모니터링 시스템 | environmental monitoring | 2500+ | 초급 | 1K-10K | 높음 |
+| 엣지 AI 컴퓨터 비전 | TinyML tutorial | 3000+ | 중급-고급 | 1K-10K | 중간 |
+| LoRaWAN vs WiFi 비교 | LoRaWAN vs WiFi | 2000+ | 초급 | 10K-100K | 중간 |`
+    },
+    "agent-configuration.json": {
+        icon: "⚙️",
+        badge: "설정",
+        badgeClass: "badge-json",
+        content: `# Visual Documentation Agent 설정
+
+## 에이전트 정보
+- **이름**: Visual Documentation Agent
+- **버전**: 1.0.0
+- **설명**: 기술 가이드를 시각적으로 매력적인 형식으로 변환
+
+---
+
+## 기능
+
+### 다이어그램 생성
+- **지원 유형**: architecture, flowchart, sequence, state, ER, network, timeline
+- **형식**: mermaid, plantuml, graphviz, svg
+- **출력**: markdown, html, pdf, png, svg
+
+### 포맷팅
+- **제목 레벨**: 6단계
+- **폰트 제안**: Inter, Roboto, system-ui
+- **코드 폰트**: Fira Code, JetBrains Mono, Consolas
+- **줄 높이**: 1.6
+
+### 색상
+- **Primary**: #2196F3 (파랑)
+- **Secondary**: #4CAF50 (초록)
+- **Accent**: #FF9800 (주황)
+- **Error**: #f44336 (빨강)
+- **Neutral**: #607D8B (회색)
+
+---
+
+## 도구
+
+### 주요 도구
+1. **Mermaid.js** - 다이어그램 생성
+2. **Markdown** - 콘텐츠 포맷팅
+3. **HTML/CSS** - 사용자 정의 스타일링
+
+### 지원 도구
+- PlantUML
+- Graphviz (DOT)
+- D3.js
+- Chart.js`
+    },
+    "seo-checklist.json": {
+        icon: "✅",
+        badge: "체크리스트",
+        badgeClass: "badge-json",
+        content: `# SEO 체크리스트
+
+## 40개 점검 항목 (10개 카테고리)
+
+### 1. 제목 최적화 (4개)
+- [ ] 제목에 주요 키워드 포함
+- [ ] 제목 길이 50-60자
+- [ ] 매력적인 제목 (클릭 유도)
+- [ ] 제목 중복 확인
+
+### 2. 메타 정보 (4개)
+- [ ] 메타 설명 (150-160자)
+- [ ] 메타 키워드
+- [ ] Open Graph 태그
+- [ ] Twitter Card 태그
+
+### 3. 콘텐츠 구조 (6개)
+- [ ] H1 태그 하나만 사용
+- [ ] H2-H4 제목 계층 구조
+- [ ] 목차 포함
+- [ ] 짧은 문단 (3-4줄)
+- [ ] 글머리 기호 사용
+- [ ] TL;DR 요약
+
+### 4. 기술 콘텐츠 품질 (7개)
+- [ ] 정확한 기술 정보
+- [ ] 코드 예제 포함
+- [ ] 코드에 주석
+- [ ] 스크린샷/다이어그램
+- [ ] 단계별 가이드
+- [ ] 문제 해결 섹션
+- [ ] 최신 정보 유지
+
+### 5. 키워드 최적화 (5개)
+- [ ] 키워드 밀도 0.5-2.5%
+- [ ] LSI 키워드 사용
+- [ ] 자연스러운 키워드 배치
+- [ ] 긴 꼬리 키워드 타겟팅
+- [ ] 키워드 스태핑 피하기
+
+### 6. 가독성 (5개)
+- [ ] Flesch Reading Ease 점수 >60
+- [ ] 짧은 문장 (15-20단어)
+- [ ] 수동태 피하기
+- [ ] 전문 용어 설명
+- [ ] 다양한 문장 구조
+
+### 7. 미디어 (4개)
+- [ ] 최적화된 이미지
+- [ ] alt 태그 모든 이미지
+- [ ] 관련 다이어그램
+- [ ] 비디오 튜토리얼
+
+### 8. 링크 (4개)
+- [ ] 내부 링크
+- [ ] 외부 권위 링크
+- [ ] 깨진 링크 확인
+- [ ] 앵커 텍스트 최적화
+
+### 9. 스키마 마크업 (4개)
+- [ ] Article 스키마
+- [ ] BreadcrumbList 스키마
+- [ ] FAQPage 스키마
+- [ ] HowTo 스키마
+
+### 10. 기술 SEO (6개)
+- [ ] 모바일 친화적
+- [ ] 페이지 로드 속도 <3초
+- [ ] HTTPS 사용
+- [ ] Sitemap 제출
+- [ ] Robots.txt
+- [ ] Canonical URL`
+    },
+    "PROJECT_SUMMARY.md": {
+        icon: "📊",
+        badge: "요약",
+        badgeClass: "badge-md",
+        content: `# SEO 최적화 블로그 콘텐츠 에이전트 - 프로젝트 요약
+
+## 개요
+
+Arduino, LoRaWAN, 컴퓨터 비전, 환경 모니터링 프로젝트를 위한 완전한 SEO 최적화 시스템입니다. 검색 엔진 친화적 콘텐츠를 만들면서 기술적 정확성과 교육적 가치를 유지합니다.
+
+---
+
+## 생성된 핵심 파일
+
+### 1. seo-blog-agent.js (14 KB)
+분석 엔진의 핵심 파일입니다.
+
+**주요 기능:**
+- 제목 최적화 분석
+- 제목 구조 검증
+- 키워드 밀도 계산 (목표: 0.5-2.5%)
+- 가독성 점수 (Flesch Reading Ease)
+- 기술적 품질 평가
+- 메타 정보 생성
+- 소셜 미디어 요약 생성
+- 40개 점검 항목 분석 시스템
+
+### 2. seo-checklist.json (8.9 KB)
+10개 카테고리로 구성된 40개 점검 항목:
+
+1. 제목 최적화 (4개)
+2. 메타 정보 (4개)
+3. 콘텐츠 구조 (6개)
+4. 기술적 콘텐츠 품질 (7개)
+5. 키워드 최적화 (5개)
+6. 가독성 (5개)
+7. 미디어 (4개)
+8. 내/외부 링크 (4개)
+9. 스키마 마크업 (4개)
+10. 기술 SEO (6개)
+
+### 3. iot-keyword-research.json (11 KB)
+5개 주요 IoT 주제에 대한 키워드 데이터:
+
+- Arduino Nicla Vision (40+ 키워드)
+- Arduino Nicla Sense Me (40+ 키워드)
+- LoRaWAN 통신 (40+ 키워드)
+- 컴퓨터 비전 IoT (40+ 키워드)
+- 환경 모니터링 (40+ 키워드)`
+    },
+    "architecture-diagrams.md": {
+        icon: "🏗️",
+        badge: "아키텍처",
+        badgeClass: "badge-md",
+        content: `# 시스템 아키텍처 다이어그램
+
+## 전체 시스템 아키텍처
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                    IoT 멀티 센서 시스템                      │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+│  Nicla       │  │  Nicla       │  │  Nicla       │
+│  Vision #1   │  │  Vision #2   │  │  Sense Me    │
+│              │  │              │  │              │
+│  📷 카메라   │  │  📷 카메라   │  │  🌡️ 센서    │
+│  🤖 AI 감지  │  │  🤖 AI 감지  │  │  🌡️ 온/습   │
+└──────┬───────┘  └──────┬───────┘  └──────┬───────┘
+       │                 │                 │
+       │ Serial          │ Serial          │ Serial
+       │                 │                 │
+       └─────────────────┼─────────────────┘
+                         │
+                         ▼
+              ┌──────────────────┐
+              │   MKR WAN 1310   │
+              │      (허브)      │
+              │                  │
+              │  📡 LoRaWAN      │
+              │  📶 WiFi         │
+              └────────┬─────────┘
+                       │
+        ┌──────────────┼──────────────┐
+        │              │              │
+        ▼              ▼              ▼
+   ┌─────────┐   ┌─────────┐   ┌─────────┐
+   │  LoRa   │   │  MQTT   │   │  OTA    │
+   │게이트웨이│   │ 브로커   │   │ 업데이트 │
+   └────┬────┘   └────┬────┘   └─────────┘
+        │             │
+        └──────┬──────┘
+               ▼
+        ┌─────────────┐
+        │   클라우드   │
+        │  대시보드    │
+        └─────────────┘
+\`\`\`
+
+---
+
+## 데이터 흐름
+
+\`\`\`
+센서/카메라 → 데이터 수집 → 직렬 전송 → 집계 → LoRaWAN → 클라우드 → 대시보드
+     ↓                                    ↓
+  로컬 저장                         MQTT 브로커
+     ↓                                    ↓
+  LED 알림                       모바일 앱/웹
+\`\`\```
+    },
+    "arduino-code-examples.md": {
+        icon: "💻",
+        badge: "코드",
+        badgeClass: "badge-md",
+        content: `# Arduino 코드 예제
+
+## Nicla Sense Me - 기본 센서 읽기
+
+\`\`\`cpp
+#include <Arduino_BHY2.h>
+
+SensorTemperature temperature(SENSOR_ID_TEMP);
+SensorHumidity humidity(SENSOR_ID_HUM);
+
+void setup() {
+  Serial.begin(115200);
+  BHY2.begin();
+  temperature.begin();
+  humidity.begin();
+}
+
+void loop() {
+  BHY2.update();
+  Serial.print("온도: ");
+  Serial.print(temperature.value());
+  Serial.println(" °C");
+  Serial.print("습도: ");
+  Serial.print(humidity.value());
+  Serial.println(" %");
+  delay(1000);
+}
+\`\`\`
+
+---
+
+## Nicla Vision - 기본 카메라 캡처
+
+\`\`\`cpp
+#include "Arduino_H7_Video.h"
+#include "mbed.h"
+#include "rtos.h"
+
+CameraOV5640 camera(CAMERA_R320x240, CAMERA_RGB565);
+
+void setup() {
+  Serial.begin(115200);
+  camera.begin();
+}
+
+void loop() {
+  CameraFrameBuffer frame;
+  if (camera.grabFrame(frame, 3000)) {
+    Serial.print("프레임 캡처: ");
+    Serial.print(frame.getResolutionX());
+    Serial.print("x");
+    Serial.println(frame.getResolutionY());
+  }
+  delay(100);
+}
+\`\`\`
+
+---
+
+## MKR WAN 1310 - 기본 LoRa 전송
+
+\`\`\`cpp
+#include <MKRWAN.h>
+
+LoRaModem modem;
+
+void setup() {
+  Serial.begin(9600);
+  if (!modem.begin(EU868)) {
+    Serial.println("LoRa 시작 실패");
+    while (1);
+  }
+}
+
+void loop() {
+  modem.beginPacket();
+  modem.print("Hello LoRa!");
+  int err = modem.endPacket();
+  if (err > 0) {
+    Serial.println("메시지 전송 성공");
+  }
+  delay(60000);
+}
+\`\`\``
+    },
+    "visual_documentation_agent.py": {
+        icon: "🐍",
+        badge: "Python",
+        badgeClass: "badge-py",
+        content: `# Visual Documentation Agent
+
+## 개요
+
+기술 가이드를 시각적으로 매력적인 형식으로 변환하는 Python 스크립트입니다.
+
+---
+
+## 주요 기능
+
+1. **다이어그램 생성**
+   - Mermaid.js 다이어그램 렌더링
+   - 아키텍처 다이어그램
+   - 흐름도
+   - 시퀀스 다이어그램
+
+2. **마크다운 처리**
+   - 제목 계층 구조
+   - 코드 블록 강조
+   - 테이블 포맷팅
+   - 목차 생성
+
+3. **HTML 출력**
+   - 반응형 레이아웃
+   - 스타일시트 포함
+   - 인터랙티브 요소
+
+---
+
+## 사용법
+
+\`\`\`bash
+python visual_documentation_agent.py input.md output.html
+\`\`\`
+
+---
+
+## 설정 옵션
+
+\`\`\`python
+config = {
+    "theme": "light",      # light, dark
+    "diagrams": true,      # 다이어그램 포함
+    "toc": true,           # 목차 포함
+    "code_highlight": True # 코드 강조
+}
+\`\`\``
+    },
+    "seo-blog-agent.js": {
+        icon: "📝",
+        badge: "JavaScript",
+        badgeClass: "badge-js",
+        content: `# SEO Blog Agent
+
+## 개요
+
+기술 블로그 콘텐츠를 위한 SEO 분석 엔진입니다.
+
+---
+
+## 주요 메서드
+
+### analyzeContent(content, keywords)
+전체 SEO 분석 수행
+
+\`\`\`javascript
+const result = agent.analyzeContent(blogPost, ["arduino", "iot"]);
+console.log(result.score); // 0-100 점수
+\`\`\`
+
+### analyzeTitle(content)
+제목 최적화 분석
+
+- 길이 검사 (50-60자 권장)
+- 키워드 포함 여부
+- 감정적 단어 사용
+- 숫자 포함 여부
+
+### analyzeKeywords(content, targetKeywords)
+키워드 밀도 분석
+
+- 키워드 빈도 계산
+- 밀도 퍼센트 (목표: 0.5-2.5%)
+- 키워드 배치 분석
+
+### generateTitleVariants(topic, keyword, audience)
+10개 제목 변형 생성
+
+\`\`\`javascript
+const titles = agent.generateTitleVariants(
+    "Arduino 프로젝트",
+    "Nicla Vision",
+    "beginner"
+);
+\`\`\`
+
+---
+
+## 출력 예시
+
+\`\`\`json
+{
+  "score": 78,
+  "issues": [
+    {"type": "warning", "message": "제목이 65자입니다 (권장: 50-60)"},
+    {"type": "info", "message": "키워드 밀도가 좋습니다: 1.8%"}
+  ],
+  "suggestions": [
+    "H2 제목을 하나 더 추가하세요",
+    "더 많은 이미지를 고려하세요"
+  ]
+}
+\`\`\``
+    },
+    "blog-post-template.md": {
+        icon: "📄",
+        badge: "템플릿",
+        badgeClass: "badge-md",
+        content: `# 블로그 게시물 템플릿
+
+## [매력적인 제목 여기에]
+
+### TL;DR
+> 2-3문장 요약
+
+---
+
+## 목차
+1. [소개](#소개)
+2. [필요한 것](#필요한-것)
+3. [단계별 가이드](#단계별-가이드)
+4. [코드](#코드)
+5. [문제 해결](#문제-해결)
+6. [결론](#결론)
+
+---
+
+## 소개
+
+매력적인 도입부로 독자의 관심 끌기...
+
+---
+
+## 필요한 것
+
+### 하드웨어
+| 구성품 | 사양 | 예상 가격 |
+|--------|------|----------|
+| Arduino | xxx | $xx |
+
+### 소프트웨어
+- Arduino IDE 2.0
+- 라이브러리명
+
+---
+
+## 단계별 가이드
+
+### Step 1: [첫 번째 단계]
+
+설명과 이미지...
+
+### Step 2: [두 번째 단계]
+
+계속...
+
+---
+
+## 코드
+
+\`\`\`cpp
+// 코드 예제
+void setup() {
+  // 설정 코드
+}
+\`\`\`
+
+---
+
+## 문제 해결
+
+| 문제 | 해결책 |
+|------|--------|
+| 안되요 | 이렇게 하세요 |
+
+---
+
+## 결론
+
+마무리와 다음 단계 제안...
+
+---
+
+## FAQ
+
+**Q: 질문?**
+A: 답변
+
+---
+
+## 추가 자료
+
+- [링크](url)
+- [더 많은 정보](url)`
+    }
+};
+
+        let currentFile = null;
+
+        function renderFileTree() {
+            const tree = document.getElementById('fileTree');
+            let html = '';
+            for (const [filename, data] of Object.entries(fileData)) {
+                html += `
+                    <li class="file-item" onclick="openFile('${filename}')" data-file="${filename}">
+                        <span class="file-icon">${data.icon}</span>
+                        <span>${filename.length > 25 ? filename.substring(0, 22) + '...' : filename}</span>
+                        <span class="badge ${data.badgeClass}">${data.badge}</span>
+                    </li>
+                `;
+            }
+            tree.innerHTML = html;
         }
-        const topics = {
-            'vision': { name: 'Arduino Nicla Vision', volume: '1K-10K/월', diff: '보통', trend: '증가' },
-            'sense': { name: 'Arduino Nicla Sense Me', volume: '1K-10K/월', diff: '낮음', trend: '안정' },
-            'lorawan': { name: 'LoRaWAN 통신', volume: '10K-100K/월', diff: '보통', trend: '성장' },
-            'cv': { name: '컴퓨터 비전 IoT', volume: '1K-10K/월', diff: '높음', trend: '급성장' },
-            'env': { name: '환경 모니터링', volume: '10K-100K/월', diff: '보통', trend: '성장' }
-        };
-        const icons = { vision: '', sense: '', lorawan: '', cv: '', env: '' };
-        let html = '';
-        for (const [key, t] of Object.entries(topics)) {
-            html += '<div class="card"><h4 class="card-title">'+icons[key]+' '+t.name+'</h4>';
-            html += '<div class="info-grid">';
-            html += '<div class="info-item"><div class="info-label">검색량</div><div class="info-value">'+t.volume+'</div></div>';
-            html += '<div class="info-item"><div class="info-label">난이도</div><div class="info-value">'+t.diff+'</div></div>';
-            html += '<div class="info-item"><div class="info-label">트렌드</div><div class="info-value">'+t.trend+'</div></div></div></div>';
+
+        function openFile(filename) {
+            currentFile = filename;
+            const data = fileData[filename];
+            const contentArea = document.getElementById('contentArea');
+
+            // Update active state
+            document.querySelectorAll('.file-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.file === filename) {
+                    item.classList.add('active');
+                }
+            });
+
+            contentArea.innerHTML = `
+                <h2 class="content-title">${data.icon} ${filename}</h2>
+                <div class="content-body">${renderMarkdown(data.content)}</div>
+            `;
         }
-        document.getElementById('keywords-data').innerHTML = html;
-        const posts = [
-            {title: 'Arduino Nicla Vision 완전 가이드', len: '2500+단어', vol: '1K-10K', diff: '초급-중급', pri: 'high'},
-            {title: 'LoRaWAN 날씨 스테이션 만들기', len: '2000+단어', vol: '5K-50K', diff: '중급', pri: 'high'},
-            {title: '공기질 모니터링 시스템', len: '2500+단어', vol: '1K-10K', diff: '초급', pri: 'high'},
-            {title: '엣지 AI 컴퓨터 비전', len: '3000+단어', vol: '1K-10K', diff: '중급-고급', pri: 'medium'},
-            {title: 'LoRaWAN vs WiFi 비교', len: '2000+단어', vol: '10K-100K', diff: '초급', pri: 'medium'}
-        ];
-        let bhtml = '<h3 style="margin-bottom:20px;color:#333">추천 블로그 주제</h3>';
-        posts.forEach(p => {
-            bhtml += '<div class="blog-post '+ (p.pri=='high'?'priority-high':'priority-medium') +'">';
-            bhtml += '<div class="blog-title">'+p.title+'</div>';
-            bhtml += '<div class="blog-meta"><span>'+p.len+'</span><span>'+p.vol+'</span><span>'+p.diff+'</span></div></div>';
-        });
-        document.getElementById('blog-data').innerHTML = bhtml;
+
+        function renderMarkdown(text) {
+            let html = text;
+            // Headers
+            html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+            html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+            html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+            // Bold
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Italic
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            // Code blocks
+            html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
+            // Inline code
+            html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+            // Links
+            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+            // Tables
+            html = html.replace(/\|(.+)\|/g, function(match) {
+                const cells = match.split('|').filter(c => c.trim());
+                if (cells.some(c => c.includes('---'))) return '';
+                return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+            });
+            // Wrap tables
+            html = html.replace(/(<tr>.*<\/tr>)+/g, '<table>$&</table>');
+            // Blockquotes
+            html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
+            // Lists
+            html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
+            html = html.replace(/^(\d+)\. (.*$)/gim, '<li>$2</li>');
+            // Wrap lists
+            html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
+            // Horizontal rules
+            html = html.replace(/^---$/gim, '<hr>');
+            // Paragraphs
+            html = html.replace(/\n\n/g, '</p><p>');
+            html = '<p>' + html + '</p>';
+            // Clean up empty paragraphs
+            html = html.replace(/<p>\s*<\/p>/g, '');
+            html = html.replace(/<p>(<h[1-6]>)/g, '$1');
+            html = html.replace(/(<\/h[1-6]>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<ul>)/g, '$1');
+            html = html.replace(/(<\/ul>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<pre>)/g, '$1');
+            html = html.replace(/(<\/pre>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<blockquote>)/g, '$1');
+            html = html.replace(/(<\/blockquote>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<table>)/g, '$1');
+            html = html.replace(/(<\/table>)<\/p>/g, '$1');
+            html = html.replace(/<p>(<hr>)/g, '$1');
+            html = html.replace(/(<hr>)<\/p>/g, '$1');
+
+            return html;
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const tree = document.getElementById('fileTree');
+
+            if (!query) {
+                renderFileTree();
+                return;
+            }
+
+            let html = '';
+            for (const [filename, data] of Object.entries(fileData)) {
+                const inName = filename.toLowerCase().includes(query);
+                const inContent = data.content.toLowerCase().includes(query);
+                if (inName || inContent) {
+                    html += `
+                        <li class="file-item" onclick="openFile('${filename}')" data-file="${filename}">
+                            <span class="file-icon">${data.icon}</span>
+                            <span>${filename.length > 25 ? filename.substring(0, 22) + '...' : filename}</span>
+                            <span class="badge ${data.badgeClass}">${data.badge}</span>
+                        </li>
+                    `;
+                }
+            }
+            tree.innerHTML = html || '<li style="padding:15px;color:#666;text-align:center">검색 결과가 없습니다</li>';
+        }
+
+        // Initialize
+        renderFileTree();
     </script>
 </body>
 </html>

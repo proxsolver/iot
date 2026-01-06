@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IoT Multi-Sensor Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>IoT Multi-Sensor System</h1>
+      <div class="status-indicators">
+        <div id="connectionStatus" class="status-badge offline">
+          <span class="dot"></span>
+          <span class="text">Connecting...</span>
+        </div>
+        <div id="lastUpdate" class="last-update">Last update: Never</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Sensor Cards -->
+      <section class="sensor-cards">
+        <div class="card temperature">
+          <div class="card-header">
+            <h3>Temperature</h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+            </svg>
+          </div>
+          <div class="card-value">
+            <span id="tempValue">--</span>
+            <span class="unit">°C</span>
+          </div>
+          <div class="card-footer">
+            <span class="label">Average (24h):</span>
+            <span id="tempAvg" class="stat">--</span>
+          </div>
+        </div>
+
+        <div class="card humidity">
+          <div class="card-header">
+            <h3>Humidity</h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+          </div>
+          <div class="card-value">
+            <span id="humValue">--</span>
+            <span class="unit">%</span>
+          </div>
+          <div class="card-footer">
+            <span class="label">Average (24h):</span>
+            <span id="humAvg" class="stat">--</span>
+          </div>
+        </div>
+
+        <div class="card pressure">
+          <div class="card-header">
+            <h3>Pressure</h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path>
+            </svg>
+          </div>
+          <div class="card-value">
+            <span id="presValue">--</span>
+            <span class="unit">hPa</span>
+          </div>
+          <div class="card-footer">
+            <span class="label">Average (24h):</span>
+            <span id="presAvg" class="stat">--</span>
+          </div>
+        </div>
+
+        <div class="card gas">
+          <div class="card-header">
+            <h3>Air Quality</h3>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+              <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+            </svg>
+          </div>
+          <div class="card-value">
+            <span id="gasValue">--</span>
+            <span class="unit">kΩ</span>
+          </div>
+          <div class="card-footer">
+            <span class="label">Status:</span>
+            <span id="gasStatus" class="stat">--</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Charts Section -->
+      <section class="charts-section">
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Temperature & Humidity (24h)</h3>
+          </div>
+          <canvas id="tempHumChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-header">
+            <h3>Pressure (24h)</h3>
+          </div>
+          <canvas id="pressureChart"></canvas>
+        </div>
+      </section>
+
+      <!-- Detection & System Status -->
+      <section class="info-section">
+        <!-- Detection Feed -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Object Detections</h3>
+            <span id="detectionCount" class="badge">0 detections</span>
+          </div>
+          <div id="detectionFeed" class="detection-feed">
+            <div class="empty-state">No detections yet</div>
+          </div>
+        </div>
+
+        <!-- System Status -->
+        <div class="panel">
+          <div class="panel-header">
+            <h3>System Status</h3>
+          </div>
+          <div class="system-status">
+            <div class="status-item">
+              <span class="label">Gateway:</span>
+              <span id="gatewayStatus" class="status-value">--</span>
+            </div>
+            <div class="status-item">
+              <span class="label">Battery:</span>
+              <span id="batteryLevel" class="status-value">--</span>
+            </div>
+            <div class="status-item">
+              <span class="label">Signal:</span>
+              <span id="signalStrength" class="status-value">--</span>
+            </div>
+            <div class="status-item">
+              <span class="label">Uptime:</span>
+              <span id="uptime" class="status-value">--</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Alerts Section -->
+      <section class="alerts-section">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Recent Alerts</h3>
+            <button id="clearAlerts" class="btn-secondary">Clear All</button>
+          </div>
+          <div id="alertFeed" class="alert-feed">
+            <div class="empty-state">No alerts</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="chart.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

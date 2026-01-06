@@ -5,8 +5,10 @@
   "main": "src/backend/data_pipeline.js",
   "scripts": {
     "start": "node src/backend/data_pipeline.js",
+    "dev": "nodemon src/backend/data_pipeline.js",
     "test": "node src/kepware/test_connection.js",
-    "analyze": "node seo-blog-agent.js"
+    "migrate": "node src/database/migrate.js",
+    "seed": "node src/database/seed.js"
   },
   "keywords": [
     "IoT",
@@ -34,10 +36,26 @@
   "dependencies": {
     "node-opcua": "^2.125.0",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5",
     "body-parser": "^1.20.2",
     "sqlite3": "^5.1.7",
+    "better-sqlite3": "^9.2.2",
     "ws": "^8.16.0",
-    "dotenv": "^16.3.1"
+    "mqtt": "^5.3.4",
+    "aedes": "^0.5.3",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.3.1",
+    "express-validator": "^7.0.1",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }

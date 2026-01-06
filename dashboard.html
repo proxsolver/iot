@@ -275,191 +275,7 @@ Nicla Sense Me ──┘
 - \`architecture-diagrams.md\` - 시스템 시각화
 - \`phase-1-foundation.md\` - 빌딩 시작
 
-**예상 시간**: 전체 시스템 완료까지 10주
-
----
-
-## 📖 프로젝트 단계
-
-### Phase 1: 기초 (1-2주차)
-**목표**: 환경 설정 및 개별 보드 테스트
-
-**성공 기준**:
-- 모든 보드에 코드 컴파일 및 업로드 가능
-- 온도, 습도, 압력 읽기 가능
-- 카메라로 이미지 캡처 가능
-- The Things Network에 LoRa 메시지 전송 가능
-
-### Phase 2: 멀티 보드 통신 (3-4주차)
-**목표**: 모든 보드 간 신뢰할 수 있는 통신 구축
-
-**성공 기준**:
-- 모든 보드가 신뢰할 수 있게 통신
-- 데이터 집계가 정상 작동
-- 통신 신뢰성 >95%
-
-### Phase 3: LoRaWAN 통합 (5-6주차)
-**목표**: 장거리 통신 및 클라우드 대시보드 구현
-
-**성공 기준**:
-- LoRaWAN을 통해 데이터 성공적으로 전송
-- 대시보드에 실시간 데이터 표시
-- 감지 이벤트가 2초 이내에 나타남
-
-### Phase 4: WiFi 및 OTA 업데이트 (7주차)
-**목표**: WiFi를 통한 원격 펌웨어 업데이트 활성화
-
-**성공 기준**:
-- MKR WAN 1310의 WiFi 연결
-- OTA 업데이트 메커니즘 작동
-- 안전한 펌웨어 검증`
-    },
-    "phase-1-foundation.md": {
-        icon: "📋",
-        badge: "1-2주차",
-        badgeClass: "badge-md",
-        content: `# Phase 1: 기초와 싱글 보드 기본
-
-## 개요
-
-**기간**: 2주 (14일)
-**난이도**: 초급자
-**전제조건**: 기본 C/C++ 지식, Arduino IDE 설치됨
-
-**단계 목표**: 개발 환경 설정, 개별 보드 기능 이해, 각 보드에서 개별적으로 기본 기능 구현
-
----
-
-## 학습 목표
-
-이 단계를 완료하면 다음을 할 수 있습니다:
-- Nicla Vision, Nicla Sense Me, MKR WAN 1310용 Arduino IDE 설정
-- 각 보드에 펌웨어 작성 및 업로드
-- Nicla Sense Me에서 센서 데이터 읽기
-- Nicla Vision에서 이미지 캡처 및 기본 비전 처리
-- MKR WAN 1310에서 LoRa 통신 구성
-- Serial Monitor로 코드 디버깅
-- 기본 전력 관리 구현
-
----
-
-## Week 1: 환경 설정 및 Nicla Sense Me
-
-### Day 1-2: Arduino IDE 설정 및 보드 구성
-
-#### 작업 1.1: Arduino IDE 2.0 설치
-1. [arduino.cc](https://www.arduino.cc/en/software)에서 다운로드
-2. 운영체제용으로 설치 (Windows/Mac/Linux)
-3. Arduino IDE 실행 및 설치 확인
-
-#### 작업 1.2: 보드 지원 패키지 추가
-
-**Nicla Vision용**:
-\`\`\`
-Tools → Board → Boards Manager → "Arduino mbed OS Nano Boards" 검색 → 설치
-\`\`\`
-
-**Nicla Sense Me용**:
-\`\`\`
-Tools → Board → Boards Manager → "Arduino nRF528x Boards (Mbed OS)" 검색 → 설치
-\`\`\`
-
-**MKR WAN 1310용**:
-\`\`\`
-Tools → Board → Boards Manager → "Arduino SAMD Boards" 검색 → 설치
-\`\`\`
-
-#### 작업 1.3: 필수 라이브러리 설치
-
-**모든 보드용**:
-- \`Arduino_JSON\` by Benoit Blanchon
-- \`Arduino_LowPower\` by Arduino
-
-**Nicla Vision용**:
-- \`Arduino_AdvancedFFT\` (모션 감지용)
-- \`TensorFlowLite\` (ML 모델용)
-
-**Nicla Sense Me용**:
-- \`Arduino_BHY2\` by Arduino (센서용)
-
-**MKR WAN 1310용**:
-- \`MKRWAN\` by Arduino (LoRaWAN용)
-- \`WiFiNINA\` by Arduino (WiFi용)
-
----
-
-### Day 3-5: Nicla Sense Me - 환경 센싱
-
-#### 작업 1.4: 첫 번째 스케치 - 온도 읽기
-
-**하드웨어 설정**:
-- USB-C 케이블로 Nicla Sense Me 연결
-- 전원 표시 녹색 LED 확인
-
-**코드**: \`nicla_sense_basics.ino\`
-
-\`\`\`cpp
-#include <Arduino_BHY2.h>
-
-// 센서 객체
-SensorTemperature temperature(SENSOR_ID_TEMP);
-SensorHumidity humidity(SENSOR_ID_HUM);
-SensorPressure pressure(SENSOR_ID_BARO);
-
-void setup() {
-  Serial.begin(115200);
-  while (!Serial);
-
-  Serial.println("Nicla Sense Me - 환경 센싱");
-  Serial.println("========================================");
-
-  // 센서 초기화
-  BHY2.begin();
-  temperature.begin();
-  humidity.begin();
-  pressure.begin();
-
-  Serial.println("센서 초기화 완료!");
-}
-
-void loop() {
-  // 센서 값 업데이트
-  BHY2.update();
-
-  // 온도 읽기
-  float tempC = temperature.value();
-  float tempF = (tempC * 9/5) + 32;
-
-  // 습도 읽기
-  float hum = humidity.value();
-
-  // 압력 읽기
-  float pres = pressure.value();
-
-  // 결과 출력
-  Serial.println("────────────────────────────────────────");
-  Serial.print("온도: ");
-  Serial.print(tempC);
-  Serial.print(" °C (");
-  Serial.print(tempF);
-  Serial.println(" °F)");
-
-  Serial.print("습도: ");
-  Serial.print(hum);
-  Serial.println(" %");
-
-  Serial.print("압력: ");
-  Serial.print(pres);
-  Serial.println(" hPa");
-
-  delay(1000);
-}
-\`\`\`
-
-**성공 기준**:
-- [ ] 시리얼 모니터에 온도가 표시됨
-- [ ] 습도 값이 정상적으로 표시됨
-- [ ] 압력 값이 정상적으로 표시됨`
+**예상 시간**: 전체 시스템 완료까지 10주`
     },
     "quick-reference.md": {
         icon: "🔍",
@@ -473,27 +289,6 @@ void loop() {
 - **Nicla Vision** (객체 감지용 듀얼 카메라)
 - **Nicla Sense Me** (환경 센싱)
 - **MKR WAN 1310** (LoRaWAN + WiFi 통신)
-
----
-
-## 에이전트 사용법
-
-### 새 프로젝트 시작
-
-**에이전트에게 말하기**:
-1. IoT 프로젝트 아이디어/비전
-2. 사용 가능한 하드웨어 또는 예산
-3. 기술 수준 (초급/중급/고급)
-4. 타임라인 요구사항
-5. 특정 목표 또는 제약조건
-
-**예시 프롬프트**:
-\`\`\`
-2개의 카메라로 내 재산을 모니터링하는 보안 시스템을 만들고 싶어요.
-Nicla Vision, Nicla Sense Me, MKR WAN 1310 보드가 있습니다.
-기본 C++ 지식이 있는 초보자입니다.
-8주 안에 작동하게 만들어야 해요.
-\`\`\`
 
 ---
 
@@ -547,37 +342,7 @@ Nicla Vision, Nicla Sense Me, MKR WAN 1310 보드가 있습니다.
 - **메모리**: 256KB Flash, 32KB RAM
 - **LoRa**: Murata module (EU868/US915)
 - **WiFi**: u-blox NINA-W10
-- **전력**: 활성 ~35mA, 슬립 ~5µA
-
----
-
-## 일반적인 명령어
-
-### Arduino IDE
-\`\`\`bash
-# 보드 매니저 열기
-Tools → Board → Boards Manager
-
-# 라이브러리 매니저 열기
-Sketch → Include Library → Manage Libraries
-
-# 시리얼 모니터 열기
-Tools → Serial Monitor (또는 Ctrl+Shift+M)
-\`\`\`
-
-### Serial 통신 속도
-\`\`\`
-Nicla Vision:    115200 baud
-Nicla Sense Me:  115200 baud
-MKR WAN 1310:    9600 baud (기본)
-\`\`\`
-
-### I2C 주소
-\`\`\`
-Nicla Vision:    0x2F (OV7255), 0x3D (HM01B0)
-Nicla Sense Me:  0x76 (BME688)
-MKR WAN 1310:    0x11 (LoRa module)
-\`\`\``
+- **전력**: 활성 ~35mA, 슬립 ~5µA`
     },
     "iot-keyword-research.json": {
         icon: "🔑",
@@ -590,581 +355,34 @@ MKR WAN 1310:    0x11 (LoRa module)
 ### 주제별 검색 데이터
 
 #### 1. Arduino Nicla Vision
-- **주요 키워드**: Arduino Nicla Vision tutorial, Nicla Vision projects, Arduino Nicla Vision guide
+- **주요 키워드**: Arduino Nicla Vision tutorial, Nicla Vision projects
 - **검색량**: 1K-10K/월
 - **난이도**: 보통
 - **트렌드**: 증가중
 
 #### 2. Arduino Nicla Sense Me
-- **주요 키워드**: Arduino Nicla Sense Me tutorial, Nicla Sense Me projects, Arduino environmental monitoring
+- **주요 키워드**: Nicla Sense Me projects, environmental monitoring
 - **검색량**: 1K-10K/월
 - **난이도**: 낮음
 - **트렌드**: 안정적
 
 #### 3. LoRaWAN 통신
-- **주요 키워드**: LoRaWAN tutorial, LoRaWAN Arduino, LoRaWAN projects
+- **주요 키워드**: LoRaWAN tutorial, LoRaWAN Arduino
 - **검색량**: 10K-100K/월
 - **난이도**: 보통
 - **트렌드**: 성장중
 
 #### 4. 컴퓨터 비전 IoT
-- **주요 키워드**: computer vision IoT, IoT camera projects, edge AI IoT
+- **주요 키워드**: computer vision IoT, edge AI IoT
 - **검색량**: 1K-10K/월
 - **난이도**: 높음
 - **트렌드**: 급성장
 
 #### 5. 환경 모니터링
-- **주요 키워드**: environmental monitoring IoT, IoT weather station, air quality monitoring system
+- **주요 키워드**: environmental monitoring IoT, weather station
 - **검색량**: 10K-100K/월
 - **난이도**: 보통
-- **트렌드**: 성장중
-
----
-
-## 추천 블로그 주제
-
-| 제목 | 주요 키워드 | 길이 | 난이도 | 검색량 | 우선순위 |
-|------|------------|------|--------|--------|----------|
-| Arduino Nicla Vision 완전 가이드 | Nicla Vision tutorial | 2500+ | 초급-중급 | 1K-10K | 높음 |
-| LoRaWAN 날씨 스테이션 만들기 | LoRaWAN project | 2000+ | 중급 | 5K-50K | 높음 |
-| 공기질 모니터링 시스템 | environmental monitoring | 2500+ | 초급 | 1K-10K | 높음 |
-| 엣지 AI 컴퓨터 비전 | TinyML tutorial | 3000+ | 중급-고급 | 1K-10K | 중간 |
-| LoRaWAN vs WiFi 비교 | LoRaWAN vs WiFi | 2000+ | 초급 | 10K-100K | 중간 |`
-    },
-    "agent-configuration.json": {
-        icon: "⚙️",
-        badge: "설정",
-        badgeClass: "badge-json",
-        content: `# Visual Documentation Agent 설정
-
-## 에이전트 정보
-- **이름**: Visual Documentation Agent
-- **버전**: 1.0.0
-- **설명**: 기술 가이드를 시각적으로 매력적인 형식으로 변환
-
----
-
-## 기능
-
-### 다이어그램 생성
-- **지원 유형**: architecture, flowchart, sequence, state, ER, network, timeline
-- **형식**: mermaid, plantuml, graphviz, svg
-- **출력**: markdown, html, pdf, png, svg
-
-### 포맷팅
-- **제목 레벨**: 6단계
-- **폰트 제안**: Inter, Roboto, system-ui
-- **코드 폰트**: Fira Code, JetBrains Mono, Consolas
-- **줄 높이**: 1.6
-
-### 색상
-- **Primary**: #2196F3 (파랑)
-- **Secondary**: #4CAF50 (초록)
-- **Accent**: #FF9800 (주황)
-- **Error**: #f44336 (빨강)
-- **Neutral**: #607D8B (회색)
-
----
-
-## 도구
-
-### 주요 도구
-1. **Mermaid.js** - 다이어그램 생성
-2. **Markdown** - 콘텐츠 포맷팅
-3. **HTML/CSS** - 사용자 정의 스타일링
-
-### 지원 도구
-- PlantUML
-- Graphviz (DOT)
-- D3.js
-- Chart.js`
-    },
-    "seo-checklist.json": {
-        icon: "✅",
-        badge: "체크리스트",
-        badgeClass: "badge-json",
-        content: `# SEO 체크리스트
-
-## 40개 점검 항목 (10개 카테고리)
-
-### 1. 제목 최적화 (4개)
-- [ ] 제목에 주요 키워드 포함
-- [ ] 제목 길이 50-60자
-- [ ] 매력적인 제목 (클릭 유도)
-- [ ] 제목 중복 확인
-
-### 2. 메타 정보 (4개)
-- [ ] 메타 설명 (150-160자)
-- [ ] 메타 키워드
-- [ ] Open Graph 태그
-- [ ] Twitter Card 태그
-
-### 3. 콘텐츠 구조 (6개)
-- [ ] H1 태그 하나만 사용
-- [ ] H2-H4 제목 계층 구조
-- [ ] 목차 포함
-- [ ] 짧은 문단 (3-4줄)
-- [ ] 글머리 기호 사용
-- [ ] TL;DR 요약
-
-### 4. 기술 콘텐츠 품질 (7개)
-- [ ] 정확한 기술 정보
-- [ ] 코드 예제 포함
-- [ ] 코드에 주석
-- [ ] 스크린샷/다이어그램
-- [ ] 단계별 가이드
-- [ ] 문제 해결 섹션
-- [ ] 최신 정보 유지
-
-### 5. 키워드 최적화 (5개)
-- [ ] 키워드 밀도 0.5-2.5%
-- [ ] LSI 키워드 사용
-- [ ] 자연스러운 키워드 배치
-- [ ] 긴 꼬리 키워드 타겟팅
-- [ ] 키워드 스태핑 피하기
-
-### 6. 가독성 (5개)
-- [ ] Flesch Reading Ease 점수 >60
-- [ ] 짧은 문장 (15-20단어)
-- [ ] 수동태 피하기
-- [ ] 전문 용어 설명
-- [ ] 다양한 문장 구조
-
-### 7. 미디어 (4개)
-- [ ] 최적화된 이미지
-- [ ] alt 태그 모든 이미지
-- [ ] 관련 다이어그램
-- [ ] 비디오 튜토리얼
-
-### 8. 링크 (4개)
-- [ ] 내부 링크
-- [ ] 외부 권위 링크
-- [ ] 깨진 링크 확인
-- [ ] 앵커 텍스트 최적화
-
-### 9. 스키마 마크업 (4개)
-- [ ] Article 스키마
-- [ ] BreadcrumbList 스키마
-- [ ] FAQPage 스키마
-- [ ] HowTo 스키마
-
-### 10. 기술 SEO (6개)
-- [ ] 모바일 친화적
-- [ ] 페이지 로드 속도 <3초
-- [ ] HTTPS 사용
-- [ ] Sitemap 제출
-- [ ] Robots.txt
-- [ ] Canonical URL`
-    },
-    "PROJECT_SUMMARY.md": {
-        icon: "📊",
-        badge: "요약",
-        badgeClass: "badge-md",
-        content: `# SEO 최적화 블로그 콘텐츠 에이전트 - 프로젝트 요약
-
-## 개요
-
-Arduino, LoRaWAN, 컴퓨터 비전, 환경 모니터링 프로젝트를 위한 완전한 SEO 최적화 시스템입니다. 검색 엔진 친화적 콘텐츠를 만들면서 기술적 정확성과 교육적 가치를 유지합니다.
-
----
-
-## 생성된 핵심 파일
-
-### 1. seo-blog-agent.js (14 KB)
-분석 엔진의 핵심 파일입니다.
-
-**주요 기능:**
-- 제목 최적화 분석
-- 제목 구조 검증
-- 키워드 밀도 계산 (목표: 0.5-2.5%)
-- 가독성 점수 (Flesch Reading Ease)
-- 기술적 품질 평가
-- 메타 정보 생성
-- 소셜 미디어 요약 생성
-- 40개 점검 항목 분석 시스템
-
-### 2. seo-checklist.json (8.9 KB)
-10개 카테고리로 구성된 40개 점검 항목:
-
-1. 제목 최적화 (4개)
-2. 메타 정보 (4개)
-3. 콘텐츠 구조 (6개)
-4. 기술적 콘텐츠 품질 (7개)
-5. 키워드 최적화 (5개)
-6. 가독성 (5개)
-7. 미디어 (4개)
-8. 내/외부 링크 (4개)
-9. 스키마 마크업 (4개)
-10. 기술 SEO (6개)
-
-### 3. iot-keyword-research.json (11 KB)
-5개 주요 IoT 주제에 대한 키워드 데이터:
-
-- Arduino Nicla Vision (40+ 키워드)
-- Arduino Nicla Sense Me (40+ 키워드)
-- LoRaWAN 통신 (40+ 키워드)
-- 컴퓨터 비전 IoT (40+ 키워드)
-- 환경 모니터링 (40+ 키워드)`
-    },
-    "architecture-diagrams.md": {
-        icon: "🏗️",
-        badge: "아키텍처",
-        badgeClass: "badge-md",
-        content: `# 시스템 아키텍처 다이어그램
-
-## 전체 시스템 아키텍처
-
-\`\`\`
-┌─────────────────────────────────────────────────────────────┐
-│                    IoT 멀티 센서 시스템                      │
-└─────────────────────────────────────────────────────────────┘
-
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│  Nicla       │  │  Nicla       │  │  Nicla       │
-│  Vision #1   │  │  Vision #2   │  │  Sense Me    │
-│              │  │              │  │              │
-│  📷 카메라   │  │  📷 카메라   │  │  🌡️ 센서    │
-│  🤖 AI 감지  │  │  🤖 AI 감지  │  │  🌡️ 온/습   │
-└──────┬───────┘  └──────┬───────┘  └──────┬───────┘
-       │                 │                 │
-       │ Serial          │ Serial          │ Serial
-       │                 │                 │
-       └─────────────────┼─────────────────┘
-                         │
-                         ▼
-              ┌──────────────────┐
-              │   MKR WAN 1310   │
-              │      (허브)      │
-              │                  │
-              │  📡 LoRaWAN      │
-              │  📶 WiFi         │
-              └────────┬─────────┘
-                       │
-        ┌──────────────┼──────────────┐
-        │              │              │
-        ▼              ▼              ▼
-   ┌─────────┐   ┌─────────┐   ┌─────────┐
-   │  LoRa   │   │  MQTT   │   │  OTA    │
-   │게이트웨이│   │ 브로커   │   │ 업데이트 │
-   └────┬────┘   └────┬────┘   └─────────┘
-        │             │
-        └──────┬──────┘
-               ▼
-        ┌─────────────┐
-        │   클라우드   │
-        │  대시보드    │
-        └─────────────┘
-\`\`\`
-
----
-
-## 데이터 흐름
-
-\`\`\`
-센서/카메라 → 데이터 수집 → 직렬 전송 → 집계 → LoRaWAN → 클라우드 → 대시보드
-     ↓                                    ↓
-  로컬 저장                         MQTT 브로커
-     ↓                                    ↓
-  LED 알림                       모바일 앱/웹
-\`\`\```
-    },
-    "arduino-code-examples.md": {
-        icon: "💻",
-        badge: "코드",
-        badgeClass: "badge-md",
-        content: `# Arduino 코드 예제
-
-## Nicla Sense Me - 기본 센서 읽기
-
-\`\`\`cpp
-#include <Arduino_BHY2.h>
-
-SensorTemperature temperature(SENSOR_ID_TEMP);
-SensorHumidity humidity(SENSOR_ID_HUM);
-
-void setup() {
-  Serial.begin(115200);
-  BHY2.begin();
-  temperature.begin();
-  humidity.begin();
-}
-
-void loop() {
-  BHY2.update();
-  Serial.print("온도: ");
-  Serial.print(temperature.value());
-  Serial.println(" °C");
-  Serial.print("습도: ");
-  Serial.print(humidity.value());
-  Serial.println(" %");
-  delay(1000);
-}
-\`\`\`
-
----
-
-## Nicla Vision - 기본 카메라 캡처
-
-\`\`\`cpp
-#include "Arduino_H7_Video.h"
-#include "mbed.h"
-#include "rtos.h"
-
-CameraOV5640 camera(CAMERA_R320x240, CAMERA_RGB565);
-
-void setup() {
-  Serial.begin(115200);
-  camera.begin();
-}
-
-void loop() {
-  CameraFrameBuffer frame;
-  if (camera.grabFrame(frame, 3000)) {
-    Serial.print("프레임 캡처: ");
-    Serial.print(frame.getResolutionX());
-    Serial.print("x");
-    Serial.println(frame.getResolutionY());
-  }
-  delay(100);
-}
-\`\`\`
-
----
-
-## MKR WAN 1310 - 기본 LoRa 전송
-
-\`\`\`cpp
-#include <MKRWAN.h>
-
-LoRaModem modem;
-
-void setup() {
-  Serial.begin(9600);
-  if (!modem.begin(EU868)) {
-    Serial.println("LoRa 시작 실패");
-    while (1);
-  }
-}
-
-void loop() {
-  modem.beginPacket();
-  modem.print("Hello LoRa!");
-  int err = modem.endPacket();
-  if (err > 0) {
-    Serial.println("메시지 전송 성공");
-  }
-  delay(60000);
-}
-\`\`\``
-    },
-    "visual_documentation_agent.py": {
-        icon: "🐍",
-        badge: "Python",
-        badgeClass: "badge-py",
-        content: `# Visual Documentation Agent
-
-## 개요
-
-기술 가이드를 시각적으로 매력적인 형식으로 변환하는 Python 스크립트입니다.
-
----
-
-## 주요 기능
-
-1. **다이어그램 생성**
-   - Mermaid.js 다이어그램 렌더링
-   - 아키텍처 다이어그램
-   - 흐름도
-   - 시퀀스 다이어그램
-
-2. **마크다운 처리**
-   - 제목 계층 구조
-   - 코드 블록 강조
-   - 테이블 포맷팅
-   - 목차 생성
-
-3. **HTML 출력**
-   - 반응형 레이아웃
-   - 스타일시트 포함
-   - 인터랙티브 요소
-
----
-
-## 사용법
-
-\`\`\`bash
-python visual_documentation_agent.py input.md output.html
-\`\`\`
-
----
-
-## 설정 옵션
-
-\`\`\`python
-config = {
-    "theme": "light",      # light, dark
-    "diagrams": true,      # 다이어그램 포함
-    "toc": true,           # 목차 포함
-    "code_highlight": True # 코드 강조
-}
-\`\`\``
-    },
-    "seo-blog-agent.js": {
-        icon: "📝",
-        badge: "JavaScript",
-        badgeClass: "badge-js",
-        content: `# SEO Blog Agent
-
-## 개요
-
-기술 블로그 콘텐츠를 위한 SEO 분석 엔진입니다.
-
----
-
-## 주요 메서드
-
-### analyzeContent(content, keywords)
-전체 SEO 분석 수행
-
-\`\`\`javascript
-const result = agent.analyzeContent(blogPost, ["arduino", "iot"]);
-console.log(result.score); // 0-100 점수
-\`\`\`
-
-### analyzeTitle(content)
-제목 최적화 분석
-
-- 길이 검사 (50-60자 권장)
-- 키워드 포함 여부
-- 감정적 단어 사용
-- 숫자 포함 여부
-
-### analyzeKeywords(content, targetKeywords)
-키워드 밀도 분석
-
-- 키워드 빈도 계산
-- 밀도 퍼센트 (목표: 0.5-2.5%)
-- 키워드 배치 분석
-
-### generateTitleVariants(topic, keyword, audience)
-10개 제목 변형 생성
-
-\`\`\`javascript
-const titles = agent.generateTitleVariants(
-    "Arduino 프로젝트",
-    "Nicla Vision",
-    "beginner"
-);
-\`\`\`
-
----
-
-## 출력 예시
-
-\`\`\`json
-{
-  "score": 78,
-  "issues": [
-    {"type": "warning", "message": "제목이 65자입니다 (권장: 50-60)"},
-    {"type": "info", "message": "키워드 밀도가 좋습니다: 1.8%"}
-  ],
-  "suggestions": [
-    "H2 제목을 하나 더 추가하세요",
-    "더 많은 이미지를 고려하세요"
-  ]
-}
-\`\`\``
-    },
-    "blog-post-template.md": {
-        icon: "📄",
-        badge: "템플릿",
-        badgeClass: "badge-md",
-        content: `# 블로그 게시물 템플릿
-
-## [매력적인 제목 여기에]
-
-### TL;DR
-> 2-3문장 요약
-
----
-
-## 목차
-1. [소개](#소개)
-2. [필요한 것](#필요한-것)
-3. [단계별 가이드](#단계별-가이드)
-4. [코드](#코드)
-5. [문제 해결](#문제-해결)
-6. [결론](#결론)
-
----
-
-## 소개
-
-매력적인 도입부로 독자의 관심 끌기...
-
----
-
-## 필요한 것
-
-### 하드웨어
-| 구성품 | 사양 | 예상 가격 |
-|--------|------|----------|
-| Arduino | xxx | $xx |
-
-### 소프트웨어
-- Arduino IDE 2.0
-- 라이브러리명
-
----
-
-## 단계별 가이드
-
-### Step 1: [첫 번째 단계]
-
-설명과 이미지...
-
-### Step 2: [두 번째 단계]
-
-계속...
-
----
-
-## 코드
-
-\`\`\`cpp
-// 코드 예제
-void setup() {
-  // 설정 코드
-}
-\`\`\`
-
----
-
-## 문제 해결
-
-| 문제 | 해결책 |
-|------|--------|
-| 안되요 | 이렇게 하세요 |
-
----
-
-## 결론
-
-마무리와 다음 단계 제안...
-
----
-
-## FAQ
-
-**Q: 질문?**
-A: 답변
-
----
-
-## 추가 자료
-
-- [링크](url)
-- [더 많은 정보](url)`
+- **트렌드**: 성장중`
     }
 };
 
@@ -1174,13 +392,11 @@ A: 답변
             const tree = document.getElementById('fileTree');
             let html = '';
             for (const [filename, data] of Object.entries(fileData)) {
-                html += `
-                    <li class="file-item" onclick="openFile('${filename}')" data-file="${filename}">
-                        <span class="file-icon">${data.icon}</span>
-                        <span>${filename.length > 25 ? filename.substring(0, 22) + '...' : filename}</span>
-                        <span class="badge ${data.badgeClass}">${data.badge}</span>
-                    </li>
-                `;
+                html += '<li class="file-item" onclick="openFile(\\'' + filename + '\\')" data-file="' + filename + '">' +
+                    '<span class="file-icon">' + data.icon + '</span>' +
+                    '<span>' + (filename.length > 25 ? filename.substring(0, 22) + '...' : filename) + '</span>' +
+                    '<span class="badge ' + data.badgeClass + '">' + data.badge + '</span>' +
+                    '</li>';
             }
             tree.innerHTML = html;
         }
@@ -1190,71 +406,53 @@ A: 답변
             const data = fileData[filename];
             const contentArea = document.getElementById('contentArea');
 
-            // Update active state
-            document.querySelectorAll('.file-item').forEach(item => {
+            document.querySelectorAll('.file-item').forEach(function(item) {
                 item.classList.remove('active');
                 if (item.dataset.file === filename) {
                     item.classList.add('active');
                 }
             });
 
-            contentArea.innerHTML = `
-                <h2 class="content-title">${data.icon} ${filename}</h2>
-                <div class="content-body">${renderMarkdown(data.content)}</div>
-            `;
+            contentArea.innerHTML =
+                '<h2 class="content-title">' + data.icon + ' ' + filename + '</h2>' +
+                '<div class="content-body">' + renderMarkdown(data.content) + '</div>';
         }
 
         function renderMarkdown(text) {
             let html = text;
-            // Headers
             html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
             html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
             html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
-            // Bold
-            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            // Italic
-            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            // Code blocks
-            html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>');
-            // Inline code
+            html = html.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');
+            html = html.replace(/```(\\w+)?\\n([\\s\\S]*?)```/g, '<pre><code>$2</code></pre>');
             html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-            // Links
-            html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
-            // Tables
-            html = html.replace(/\|(.+)\|/g, function(match) {
-                const cells = match.split('|').filter(c => c.trim());
-                if (cells.some(c => c.includes('---'))) return '';
-                return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+            html = html.replace(/\\[([^\\]]+)\\]\\(([^)]+)\\)/g, '<a href="$2" target="_blank">$1</a>');
+            html = html.replace(/\\|(.+)\\|/g, function(match) {
+                const cells = match.split('|').filter(function(c) { return c.trim(); });
+                if (cells.some(function(c) { return c.includes('---'); })) return '';
+                return '<tr>' + cells.map(function(c) { return '<td>' + c.trim() + '</td>'; }).join('') + '</tr>';
             });
-            // Wrap tables
-            html = html.replace(/(<tr>.*<\/tr>)+/g, '<table>$&</table>');
-            // Blockquotes
+            html = html.replace(/(<tr>.*<\\/tr>)+/g, '<table>$&</table>');
             html = html.replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>');
-            // Lists
             html = html.replace(/^- (.*$)/gim, '<li>$1</li>');
-            html = html.replace(/^(\d+)\. (.*$)/gim, '<li>$2</li>');
-            // Wrap lists
-            html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-            // Horizontal rules
+            html = html.replace(/(\\d+)\\. (.*$)/gim, '<li>$2</li>');
+            html = html.replace(/(<li>.*<\\/li>\\n?)+/g, '<ul>$&</ul>');
             html = html.replace(/^---$/gim, '<hr>');
-            // Paragraphs
-            html = html.replace(/\n\n/g, '</p><p>');
+            html = html.replace(/\\n\\n/g, '</p><p>');
             html = '<p>' + html + '</p>';
-            // Clean up empty paragraphs
-            html = html.replace(/<p>\s*<\/p>/g, '');
+            html = html.replace(/<p>\\s*<\\/p>/g, '');
             html = html.replace(/<p>(<h[1-6]>)/g, '$1');
-            html = html.replace(/(<\/h[1-6]>)<\/p>/g, '$1');
+            html = html.replace(/(<\\/h[1-6]>)<\\/p>/g, '$1');
             html = html.replace(/<p>(<ul>)/g, '$1');
-            html = html.replace(/(<\/ul>)<\/p>/g, '$1');
+            html = html.replace(/(<\\/ul>)<\\/p>/g, '$1');
             html = html.replace(/<p>(<pre>)/g, '$1');
-            html = html.replace(/(<\/pre>)<\/p>/g, '$1');
+            html = html.replace(/(<\\/pre>)<\\/p>/g, '$1');
             html = html.replace(/<p>(<blockquote>)/g, '$1');
-            html = html.replace(/(<\/blockquote>)<\/p>/g, '$1');
+            html = html.replace(/(<\\/blockquote>)<\\/p>/g, '$1');
             html = html.replace(/<p>(<table>)/g, '$1');
-            html = html.replace(/(<\/table>)<\/p>/g, '$1');
+            html = html.replace(/(<\\/table>)<\\/p>/g, '$1');
             html = html.replace(/<p>(<hr>)/g, '$1');
-            html = html.replace(/(<hr>)<\/p>/g, '$1');
-
+            html = html.replace(/(<hr>)<\\/p>/g, '$1');
             return html;
         }
 
@@ -1272,19 +470,16 @@ A: 답변
                 const inName = filename.toLowerCase().includes(query);
                 const inContent = data.content.toLowerCase().includes(query);
                 if (inName || inContent) {
-                    html += `
-                        <li class="file-item" onclick="openFile('${filename}')" data-file="${filename}">
-                            <span class="file-icon">${data.icon}</span>
-                            <span>${filename.length > 25 ? filename.substring(0, 22) + '...' : filename}</span>
-                            <span class="badge ${data.badgeClass}">${data.badge}</span>
-                        </li>
-                    `;
+                    html += '<li class="file-item" onclick="openFile(\\'' + filename + '\\')" data-file="' + filename + '">' +
+                        '<span class="file-icon">' + data.icon + '</span>' +
+                        '<span>' + (filename.length > 25 ? filename.substring(0, 22) + '...' : filename) + '</span>' +
+                        '<span class="badge ' + data.badgeClass + '">' + data.badge + '</span>' +
+                        '</li>';
                 }
             }
             tree.innerHTML = html || '<li style="padding:15px;color:#666;text-align:center">검색 결과가 없습니다</li>';
         }
 
-        // Initialize
         renderFileTree();
     </script>
 </body>

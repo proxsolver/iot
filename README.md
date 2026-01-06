@@ -467,13 +467,20 @@ node test_connection.js
 
 ## Documentation
 
+> 📋 **Quick Index**: See [docs/008_index.md](docs/008_index.md) for complete documentation navigation
+
 ### Comprehensive Guides
 
-| Document | Location | Description |
-|----------|----------|-------------|
-| **10-Day Build Guide** | [docs/setup-guide.md](docs/setup-guide.md) | Complete day-by-day build instructions with shopping list, assembly steps, testing procedures, and troubleshooting |
-| **Deployment Guide** | [docs/deployment.md](docs/deployment.md) | Indoor/outdoor deployment, network configuration, power options, maintenance procedures, and scaling considerations |
-| **Testing Guide** | [docs/testing.md](docs/testing.md) | Unit testing, integration testing, end-to-end testing, performance benchmarks, and acceptance criteria |
+| # | Document | Location | Description | Lines |
+|---|----------|----------|-------------|-------|
+| 001 | Setup Guide | [docs/001_setup_guide.md](docs/001_setup_guide.md) | 10-day day-by-day build instructions with shopping list, assembly steps, testing procedures | 2,134 |
+| 002 | Deployment Guide | [docs/002_deployment_guide.md](docs/002_deployment_guide.md) | Indoor/outdoor deployment, network configuration, power options, maintenance procedures | 1,945 |
+| 003 | Testing Guide | [docs/003_testing_guide.md](docs/003_testing_guide.md) | Unit testing, integration testing, end-to-end testing, performance benchmarks | - |
+| 004 | Blog Post | [docs/004_blog_post.md](docs/004_blog_post.md) | SEO-optimized blog article (8,500+ words) for publication | 8,500+ |
+| 005 | Tutorial Series | [docs/005_tutorial_series.md](docs/005_tutorial_series.md) | 5-part tutorial series outline (17 hours total) | - |
+| 006 | Video Scripts | [docs/006_video_scripts.md](docs/006_video_scripts.md) | 6 video production scripts (45 minutes total) | - |
+| 007 | Social Media | [docs/007_social_media.md](docs/007_social_media.md) | Content for 8+ social platforms | - |
+| 008 | Document Index | [docs/008_index.md](docs/008_index.md) | Complete documentation navigation | - |
 
 ### Hardware Documentation
 
@@ -792,11 +799,20 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Quick Links
 
-- [10-Day Build Guide](docs/setup-guide.md) - Start here!
-- [Deployment Guide](docs/deployment.md) - Deploy your system
-- [Testing Guide](docs/testing.md) - Verify everything works
-- [Kepware Setup](src/kepware/KEPWARE_SETUP_GUIDE.md) - SCADA integration
-- [Hardware Reference](hardware-integration-specialist/pin-mapping-reference.md) - Pin mappings
+### Documentation (Numbered for Easy Reference)
+- **[001: Setup Guide](docs/001_setup_guide.md)** - 10-day build guide (Start here!)
+- **[002: Deployment Guide](docs/002_deployment_guide.md)** - Deploy your system
+- **[003: Testing Guide](docs/003_testing_guide.md)** - Verify everything works
+- **[004: Blog Post](docs/004_blog_post.md)** - SEO-optimized article
+- **[005: Tutorial Series](docs/005_tutorial_series.md)** - 5-part tutorials
+- **[006: Video Scripts](docs/006_video_scripts.md)** - Video production scripts
+- **[007: Social Media](docs/007_social_media.md)** - Social media content
+- **[008: Document Index](docs/008_index.md)** - Complete documentation index
+
+### Hardware & Integration
+- [Wiring Diagram](src/hardware/wiring_diagram.md) - Hardware connections
+- [Pin Mapping Reference](hardware-integration-specialist/pin-mapping-reference.md) - All pins
+- [Kepware Setup Guide](src/kepware/KEPWARE_SETUP_GUIDE.md) - SCADA integration
 
 ---
 

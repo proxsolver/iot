@@ -15,12 +15,22 @@ const sqlite3 = require('sqlite3').verbose();
 const WebSocket = require('ws');
 const path = require('path');
 
+// Kepware Integration
+const {
+  KepwareIntegrationManager,
+  setupKepwareRoutes,
+  INTEGRATION_CONFIG
+} = require('../kepware/kepware_integration');
+
 // ===========================================
 // CONFIGURATION
 // ===========================================
 
 const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, 'iot_data.db');
+
+// Kepware Integration Manager
+let kepwareManager = null;
 
 // ===========================================
 // DATABASE SETUP
@@ -157,6 +167,18 @@ app.post('/api/sensor-data', (req, res) => {
       timestamp
     });
 
+    // Push to Kepware
+    if (kepwareManager && kepwareManager.isConnected) {
+      kepwareManager.updateSensorData({
+        device_id,
+        temperature,
+        humidity,
+        pressure,
+        gas_resistance,
+        timestamp
+      });
+    }
+
     res.status(201).json({ success: true, id: this.lastID });
   });
 
@@ -287,6 +309,17 @@ app.post('/api/detections', (req, res) => {
       createAlert('detection', 'high', `High confidence ${class_name} detected`, {
         camera_id,
         confidence
+      });
+    }
+
+    // Push detection to Kepware
+    if (kepwareManager && kepwareManager.isConnected) {
+      kepwareManager.pushDetection({
+        camera_id,
+        class_id,
+        class_name,
+        confidence,
+        timestamp
       });
     }
 
@@ -508,6 +541,47 @@ app.get('/', (req, res) => {
 });
 
 // ===========================================
+// KEPWARE ROUTES
+// ===========================================
+
+// Setup Kepware integration routes
+setupKepwareRoutes(app, {
+  getStatus: () => kepwareManager ? kepwareManager.getStatus() : { enabled: false, connected: false },
+  initialize: async () => {
+    if (!kepwareManager) {
+      kepwareManager = new KepwareIntegrationManager();
+    }
+    const result = await kepwareManager.initialize();
+    if (result) {
+      kepwareManager.start();
+    }
+    return result;
+  },
+  shutdown: async () => {
+    if (kepwareManager) {
+      await kepwareManager.shutdown();
+    }
+  },
+  pushDetection: async (data) => {
+    if (kepwareManager) {
+      await kepwareManager.pushDetection(data);
+    }
+  },
+  clearAlert: async () => {
+    if (kepwareManager) {
+      await kepwareManager.clearAlert();
+    }
+  },
+  readControlTags: async () => {
+    if (kepwareManager && kepwareManager.client) {
+      return await kepwareManager.client.readControlTags();
+    }
+    return null;
+  },
+  client: null // Will be set when manager initializes
+});
+
+// ===========================================
 // ERROR HANDLING
 // ===========================================
 
@@ -520,15 +594,54 @@ app.use((err, req, res, next) => {
 // START SERVER
 // ===========================================
 
-app.listen(PORT, () => {
-  console.log(`IoT Data Pipeline server running on port ${PORT}`);
-  console.log(`WebSocket server running on port 8080`);
-  console.log(`Dashboard: http://localhost:${PORT}`);
-});
+async function startServer() {
+  // Initialize Kepware if enabled
+  if (INTEGRATION_CONFIG.enabled) {
+    console.log('Kepware integration is enabled, initializing...');
+    kepwareManager = new KepwareIntegrationManager();
+
+    // Set up control command callback
+    kepwareManager.onControlCommand = (command) => {
+      console.log('Control command received from Kepware:', command);
+      broadcast('kepware_command', command);
+    };
+
+    // Set up connection state callback
+    kepwareManager.onConnectionChange = (connected) => {
+      console.log(`Kepware connection state: ${connected ? 'CONNECTED' : 'DISCONNECTED'}`);
+      broadcast('kepware_status', { connected });
+    };
+
+    // Initialize connection (will retry on failure)
+    await kepwareManager.initialize();
+
+    if (kepwareManager.isConnected) {
+      kepwareManager.start();
+    }
+  } else {
+    console.log('Kepware integration is disabled. Set KEPWARE_ENABLED=true to enable.');
+  }
+
+  // Start HTTP server
+  app.listen(PORT, () => {
+    console.log(`IoT Data Pipeline server running on port ${PORT}`);
+    console.log(`WebSocket server running on port 8080`);
+    console.log(`Dashboard: http://localhost:${PORT}`);
+    console.log(`Kepware: ${kepwareManager && kepwareManager.isConnected ? 'CONNECTED' : 'DISCONNECTED'}`);
+  });
+}
+
+startServer();
 
 // Graceful shutdown
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('\nShutting down gracefully...');
+
+  // Shutdown Kepware connection
+  if (kepwareManager) {
+    await kepwareManager.shutdown();
+  }
+
   db.close((err) => {
     if (err) {
       console.error('Error closing database:', err);

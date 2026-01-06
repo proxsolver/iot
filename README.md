@@ -1,385 +1,263 @@
-# SEO-Optimized Blog Content Agent for Technical IoT Tutorials
+# IoT Multi-Sensor System with Kepware Integration
 
-A comprehensive agent system for creating, analyzing, and optimizing SEO-friendly technical blog content focused on IoT projects, Arduino, LoRaWAN, and computer vision.
+A complete IoT multi-sensor system featuring dual camera object detection, environmental monitoring, LoRaWAN communication, and SCADA integration via Kepware OPC-UA.
 
-## Overview
+## System Overview
 
-This agent helps you create search-engine optimized technical tutorials while maintaining technical accuracy and educational value. It's specifically designed for IoT/Arduino/LoRaWAN content but can be adapted for any technical niche.
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          Complete IoT System Architecture                       │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐  │
+│  │   Nicla     │    │   Nicla     │    │   Nicla     │    │   MKR WAN    │  │
+│  │   Vision 1  │    │   Vision 2  │    │   Sense Me  │    │   1310       │  │
+│  │              │    │              │    │              │    │              │  │
+│  │  • Camera   │    │  • Camera   │    │  • Temp     │    │  • LoRaWAN  │  │
+│  │  • TinyML   │    │  • TinyML   │    │  • Humid     │    │  • WiFi     │  │
+│  │  • Object   │    │  • Object   │    │  • Pressure  │    │  • Gateway  │  │
+│  │    Detect   │    │    Detect   │    │  • Gas       │    │              │  │
+│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘    └──────┬───────┘  │
+│         │                   │                   │                   │          │
+│         └───────────────────┴───────────────────┴───────────────────┘          │
+│                                 Serial/I2C                                        │
+│                                                                                 │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │                     Data Pipeline (Node.js)                              │  │
+│  │  • SQLite Database  • REST API  • WebSocket  • Real-time Dashboard      │  │
+│  └───────────────────────────────────────┬──────────────────────────────────┘  │
+│                                          │                                     │
+│                                          │ OPC-UA                              │
+│                                          ▼                                     │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │                      Kepware KEPServerEX                                │  │
+│  │  • Sensor Tags  • Detection Tags  • Alarm Tags  • Control Tags          │  │
+│  └───────────────────────────────────────┬──────────────────────────────────┘  │
+│                                          │                                     │
+│                                          ▼                                     │
+│  ┌──────────────────────────────────────────────────────────────────────────┐  │
+│  │                          SCADA / HMI                                     │  │
+│  │  • Ignition  • InduSoft  • Wonderware  • FactoryTalk                     │  │
+│  └──────────────────────────────────────────────────────────────────────────┘  │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+## Hardware Components
+
+| Component | Qty | Purpose |
+|-----------|-----|---------|
+| Arduino Nicla Vision | 2 | Dual camera object detection with TinyML |
+| Arduino Nicla Sense Me | 1 | Environmental sensing (temp, humidity, pressure, gas) |
+| Arduino MKR WAN 1310 | 1 | LoRaWAN + WiFi gateway |
+| TCA9548A I2C Multiplexer | 1 | Enable dual cameras on single I2C bus |
+| 5V 2A Power Supply | 1 | Power for all components |
+
+**Total Cost:** ~$308 USD
+
+## Software Components
+
+### Embedded Firmware (Arduino)
+- `src/firmware/mkr_wan_gateway.ino` - Central hub with I2C multiplexer control
+- `src/firmware/nicla_vision_camera.ino` - Camera initialization and ML inference
+- `src/firmware/nicla_sense_sensors.ino` - Environmental sensor reading
+
+### Backend (Node.js)
+- `src/backend/data_pipeline.js` - Main data pipeline server
+- `src/kepware/kepware_opcua_client.js` - OPC-UA client for Kepware
+- `src/kepware/kepware_integration.js` - Integration manager
+
+### Communication
+- `src/lorawan/lorawan_implementation.h` - LoRaWAN OTAA/ABP implementation
+- `src/lorawan/downlink_handler.cpp` - Downlink command processing
+
+### Vision/ML
+- `src/vision/dual_camera_ml.cpp` - Dual camera control with TinyML
+
+### Dashboard
+- `src/dashboard/index.html` - Real-time monitoring dashboard
+- `src/dashboard/styles.css` - Dark theme styling
+- `src/dashboard/dashboard.js` - Interactive logic
 
 ## Features
 
-### 1. Content Analysis Engine
-- **Title Optimization**: Analyzes title length, keyword placement, and engagement potential
-- **Heading Structure**: Ensures proper H1/H2/H3 hierarchy
-- **Keyword Analysis**: Calculates keyword density (target: 0.5-2.5%) and suggests improvements
-- **Readability Scoring**: Uses Flesch Reading Ease to ensure content is accessible
-- **Technical Quality Assessment**: Verifies code examples, version info, and troubleshooting sections
+### 1. Dual Camera Object Detection
+- Simultaneous monitoring from 2 cameras
+- TensorFlow Lite Micro for on-device ML
+- Object classes: Person, Vehicle, Animal
+- Real-time detection in ~150ms
+- Automatic alarm triggering
 
-### 2. Keyword Research Database
-Pre-researched keywords for IoT topics:
-- **Arduino Nicla Vision**: 40+ keywords with difficulty and volume metrics
-- **Arduino Nicla Sense Me**: Environmental monitoring focus
-- **LoRaWAN**: Communication protocols and projects
-- **Computer Vision IoT**: Edge AI and TinyML content
-- **Environmental Monitoring**: Sensor networks and data visualization
+### 2. Environmental Monitoring
+- Temperature (±0.5°C accuracy)
+- Humidity (±2% accuracy)
+- Barometric pressure
+- Gas resistance (air quality)
 
-### 3. SEO Checklist
-Comprehensive 40+ point checklist covering:
-- Title optimization (50-60 characters)
-- Meta information (150-160 character descriptions)
-- Content structure (H1/H2/H3 hierarchy)
-- Technical content quality (code examples, versions, diagrams)
-- Keyword optimization (density and placement)
-- Readability (Flesch score 60+)
-- Media optimization (alt text, compression)
-- Link strategy (internal/external)
-- Schema markup (Article, HowTo, FAQ)
-- Technical SEO (URLs, canonical tags, mobile responsiveness)
+### 3. LoRaWAN Communication
+- OTAA authentication
+- Range up to 10km
+- Binary packet format (5x efficiency vs JSON)
+- Duty cycle management (1% rule)
+- Adaptive data rate
 
-### 4. Content Template
-Professional blog post template with:
-- Compelling title formats
-- Table of contents
-- Hardware/software requirements tables
-- Code syntax highlighting
-- Step-by-step instructions
-- Troubleshooting section
-- SEO-optimized headings
-- Schema-ready structure
-- Social sharing elements
+### 4. SCADA Integration (NEW!)
+- **OPC-UA connectivity** to Kepware KEPServerEX
+- **Real-time tag updates** for all sensor data
+- **Bidirectional communication** (HMI/SCADA can control IoT system)
+- **Alarm integration** with SCADA systems
+- **Compatible with major HMI/SCADA**: Ignition, InduSoft, Wonderware, FactoryTalk
 
-## File Structure
+### 5. Web Dashboard
+- Real-time sensor data visualization
+- 24-hour trend charts
+- Detection feed with confidence scores
+- System status monitoring
+- Responsive dark theme design
 
-```
-seo-blog-agent.js          # Main agent engine
-seo-checklist.json         # 40+ point SEO checklist
-iot-keyword-research.json  # Pre-researched keywords for IoT topics
-blog-post-template.md      # Ready-to-use content template
+## Quick Start
+
+### Prerequisites
+
+```bash
+# Node.js dependencies
+npm install
+
+# Arduino IDE (for firmware)
+# - Install Arduino SAMD boards (v1.8.13+)
+# - Install WiFiNINA, LoRa, MKRWAN libraries
 ```
 
-## Usage
+### Backend Setup
 
-### Basic Content Analysis
+```bash
+# Start the data pipeline
+npm start
 
-```javascript
-const SEOTechnicalBlogAgent = require('./seo-blog-agent');
+# Or with Kepware integration
+KEPWARE_ENABLED=true npm start
 
-const agent = new SEOTechnicalBlogAgent();
-
-// Your blog content
-const content = `# Arduino Nicla Vision Tutorial
-...`;
-
-// Target keywords
-const keywords = {
-  primary: ['Arduino Nicla Vision'],
-  secondary: ['computer vision', 'IoT camera', 'edge AI'],
-  longTail: ['Arduino Nicla Vision projects', 'TinyML tutorial']
-};
-
-// Analyze content
-const analysis = agent.analyzeContent(content, keywords);
-console.log(analysis);
+# Test Kepware connection
+npm test
 ```
 
-### Generate Title Variants
+### Dashboard Access
 
-```javascript
-const variants = agent.generateTitleVariants(
-  'Object Detection System',
-  'Arduino Nicla Vision',
-  'beginner'
-);
+Open browser to: `http://localhost:3000`
 
-// Returns 10 optimized title options
-variants.forEach(variant => {
-  console.log(`${variant.title} (${variant.length} chars)`);
-});
+## Kepware Integration
+
+### Configuration
+
+Create tags in Kepware following the structure in `src/kepware/KEPWARE_SETUP_GUIDE.md`:
+
+```
+Channel1
+└── IoTGateway
+    ├── NiclaSense_Temperature
+    ├── NiclaSense_Humidity
+    ├── NiclaSense_Pressure
+    ├── Camera1_DetectedClass
+    ├── Camera1_Confidence
+    ├── Camera2_DetectedClass
+    ├── Camera2_Confidence
+    ├── Alarm_Active
+    ├── Alarm_Severity
+    └── Control_SystemEnable (read from HMI)
 ```
 
-### Generate Social Media Summary
+### API Endpoints
 
-```javascript
-const summary = agent.generateSocialSummary(content, 280);
-console.log(summary); // Tweet-length summary
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/kepware/status` | GET | Connection status |
+| `/api/kepware/connect` | POST | Connect to Kepware |
+| `/api/kepware/tags` | GET | Read all tags |
+| `/api/kepware/write` | POST | Write to tag |
+| `/api/kepware/control` | GET | Read control tags |
+| `/api/kepware/alert/clear` | POST | Clear alarm |
+
+### Supported SCADA Systems
+
+- **Ignition SCADA** - OPC-UA native support
+- **InduSoft Web Studio** - OPC-UA driver
+- **Wonderware System Platform** - OPC-UA DA Server
+- **FactoryTalk View SE** - OPC-UA topic
+- **WinCC Unified** - OPC-UA connectivity
+
+## Project Structure
+
+```
+src/
+├── hardware/          # Wiring diagrams, components, power budget
+├── firmware/          # Arduino sketches (.ino)
+├── lorawan/           # LoRaWAN implementation
+├── vision/            # ML and camera control
+├── backend/           # Data pipeline server
+├── dashboard/         # Web UI (HTML/CSS/JS)
+├── kepware/           # OPC-UA integration
+│   ├── kepware_opcua_client.js
+│   ├── kepware_integration.js
+│   ├── KEPWARE_SETUP_GUIDE.md
+│   └── test_connection.js
+└── docs/              # Setup guide, blog post
 ```
 
-## Keyword Strategy
+## Documentation
 
-### Primary Focus Areas
+- [Hardware Setup Guide](src/hardware/wiring_diagram.md)
+- [Kepware Integration Guide](src/kepware/KEPWARE_SETUP_GUIDE.md)
+- [Firmware Guide](src/firmware/README.md)
+- [LoRaWAN Guide](src/lorawan/lorawan_guide.md)
+- [Setup Tutorial](docs/setup-guide.md)
+- [Blog Post](docs/blog-post.md)
 
-1. **"How-to" and Tutorial Keywords**
-   - High intent traffic
-   - Clear user need
-   - Action-oriented
+## Performance Specifications
 
-2. **Project-Based Keywords**
-   - Complete build guides
-   - End-to-end tutorials
-   - Real-world applications
+| Metric | Value |
+|--------|-------|
+| Detection latency | <2 seconds |
+| Detection accuracy | >80% |
+| Environmental accuracy | ±0.5°C, ±2% RH |
+| LoRa transmission success | >95% |
+| System uptime | >95% over 7 days |
+| Power consumption (active) | 200-500mA |
+| Power consumption (sleep) | 5-50mA |
+| Battery life (5min duty) | >24 hours |
 
-3. **Comparison Keywords**
-   - Product comparisons
-   - Protocol comparisons
-   - Technology selection guides
+## Agent Ecosystem
 
-### Content Pillars
+This project includes 5 specialized agents for development:
 
-1. **Arduino Nicla Series**
-   - Getting started guides
-   - Camera projects
-   - Machine learning
-   - Environmental sensing
+1. **IoT Planning Agent** - Top-down project guidance
+2. **Visual Documentation Agent** - Diagram and guide generation
+3. **SEO Blog Agent** - Content optimization for technical blogs
+4. **Code Review Agent** - Arduino/IoT code review
+5. **Hardware Integration Agent** - Wiring and compatibility guidance
 
-2. **LoRaWAN for IoT**
-   - Network setup
-   - Hardware selection
-   - Security best practices
-   - Real-world projects
-
-3. **Edge AI for IoT**
-   - TinyML basics
-   - Computer vision
-   - Model optimization
-   - Edge vs Cloud comparison
-
-### Keyword Research Highlights
-
-**High-Opportunity Keywords:**
-- "Arduino Nicla Vision tutorial" (1K-10K searches, medium difficulty)
-- "LoRaWAN Arduino project" (5K-50K searches, medium difficulty)
-- "TinyML Arduino tutorial" (1K-10K searches, medium-high difficulty)
-- "IoT environmental monitoring" (5K-50K searches, medium difficulty)
-
-**Long-Tail Opportunities:**
-- "how to build LoRaWAN network"
-- "Arduino Nicla Vision object detection"
-- "edge AI vs cloud AI IoT"
-- "build air quality monitor Arduino"
-
-## Recommended Blog Posts
-
-### Priority 1: High Volume, Low Competition
-
-1. **Complete Guide to Arduino Nicla Vision**
-   - 2500+ words
-   - Beginner-intermediate
-   - Primary: "Arduino Nicla Vision tutorial"
-
-2. **LoRaWAN Weather Station with Arduino**
-   - 2000+ words
-   - Intermediate
-   - Primary: "LoRaWAN Arduino project"
-
-3. **Air Quality Monitoring with Nicla Sense Me**
-   - 2500+ words
-   - Beginner
-   - Primary: "Arduino environmental monitoring"
-
-### Priority 2: Growing Topics
-
-4. **TinyML with Arduino Nicla Vision**
-   - 3000+ words
-   - Intermediate-advanced
-   - Primary: "TinyML Arduino tutorial"
-
-5. **LoRaWAN vs WiFi vs BLE Comparison**
-   - 2000+ words
-   - Beginner
-   - Primary: "LoRaWAN vs WiFi"
-
-## SEO Best Practices for Technical Tutorials
-
-### Title Optimization
-- **Length**: 50-60 characters (prevents truncation in SERPs)
-- **Keywords**: Include primary keyword naturally
-- **Engagement**: Use power words (Complete, Ultimate, Step-by-Step)
-- **Clarity**: Clearly state what the reader will learn
-
-### Meta Descriptions
-- **Length**: 150-160 characters
-- **Keywords**: Include primary keyword
-- **CTA**: Add action-oriented language
-- **Value**: Promise specific benefit
-
-### Content Structure
-- **H1**: One main title with primary keyword
-- **H2**: 3-5 main sections (introduction, steps, conclusion)
-- **H3**: Subsections for detailed explanations
-- **Length**: 1500-2500+ words for comprehensive guides
-
-### Technical Quality
-- **Code**: Syntax-highlighted, complete examples
-- **Versions**: Specify hardware/software versions
-- **Diagrams**: Include wiring diagrams and schematics
-- **Troubleshooting**: Common issues and solutions
-- **Links**: Official documentation and related resources
-
-### Readability
-- **Target**: Flesch score 60+ (easy to read)
-- **Sentences**: 15-20 words average
-- **Paragraphs**: 3-4 sentences
-- **Lists**: Use bullets and numbered lists
-- **Voice**: Active voice preferred
-
-### Media Optimization
-- **Images**: 3+ relevant images per post
-- **Alt Text**: Descriptive with keywords
-- **File Names**: Descriptive (e.g., "arduino-nicla-vision-setup.jpg")
-- **Compression**: Optimize for web (under 200KB per image)
-
-## Schema Markup Examples
-
-### Article Schema
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "Complete Guide to Arduino Nicla Vision",
-  "description": "Learn how to build computer vision projects...",
-  "author": {
-    "@type": "Person",
-    "name": "Your Name"
-  },
-  "datePublished": "2025-01-05",
-  "dateModified": "2025-01-05"
-}
-```
-
-### HowTo Schema
-```json
-{
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  "name": "Build a LoRaWAN Weather Station",
-  "step": [
-    {
-      "@type": "HowToStep",
-      "text": "Connect the LoRa module to Arduino..."
-    }
-  ]
-}
-```
-
-## Workflow Integration
-
-### Step 1: Keyword Research
-Use `iot-keyword-research.json` to find:
-- Primary keywords (main topic)
-- Secondary keywords (related concepts)
-- Long-tail keywords (specific queries)
-
-### Step 2: Create Outline
-Use the template to structure:
-- Title with primary keyword
-- H2 sections covering main topics
-- H3 subsections for details
-
-### Step 3: Draft Content
-Write technical content focusing on:
-- Clear explanations
-- Complete code examples
-- Step-by-step instructions
-- Troubleshooting guidance
-
-### Step 4: SEO Analysis
-Run the agent to check:
-- Title optimization
-- Heading structure
-- Keyword density
-- Readability score
-- Meta information
-
-### Step 5: Refine
-Address recommendations:
-- Fix heading hierarchy
-- Adjust keyword density
-- Improve readability
-- Add missing sections
-
-### Step 6: Final Review
-Check all SEO checklist items:
-- [ ] Title 50-60 chars
-- [ ] Meta description 150-160 chars
-- [ ] Single H1
-- [ ] 3+ H2 headings
-- [ ] Keyword in first 100 words
-- [ ] Flesch score 60+
-- [ ] Code examples included
-- [ ] Troubleshooting section
-- [ ] Image alt text
-- [ ] Internal/external links
-
-## Performance Tracking
-
-### Key Metrics to Monitor
-- **Organic Traffic**: Google Search Console
-- **Keyword Rankings**: Track primary keywords weekly
-- **Click-Through Rate**: Optimize titles/meta descriptions
-- **Time on Page**: Indicates content quality
-- **Bounce Rate**: Lower is better
-- **Backlinks**: Quality and quantity
-
-### Success Indicators
-- Ranking in top 10 for primary keyword within 3-6 months
-- Organic traffic growth 20%+ month-over-month
-- Average time on page 3+ minutes
-- Low bounce rate (<60%)
-- Social shares and backlinks
-
-## Advanced Features
-
-### Competitor Analysis
-Identify content gaps:
-- Limited Nicla Vision content = opportunity
-- Few practical LoRaWAN projects = fill the gap
-- Edge AI IoT growing = get in early
-- Integration tutorials underserved
-
-### Seasonal Trends
-**Peak Publishing Times:**
-- August-October: Academic projects
-- January-March: New year projects
-- May-June: Summer maker projects
-
-**Evergreen Content:**
-- Getting started tutorials
-- Hardware setup guides
-- Basic programming examples
-- Troubleshooting guides
-
-## Future Enhancements
-
-Planned features:
-- [ ] AI-powered content generation
-- [ ] Automated internal linking suggestions
-- [ ] Image optimization recommendations
-- [ ] Competitor content analysis
-- [ ] SERP feature tracking
-- [ ] Content performance predictions
-- [ ] Multilingual SEO support
+See `IOT_PLANNING_README.md` for details.
 
 ## Contributing
 
-To add new keyword research or improve the agent:
-1. Update `iot-keyword-research.json` with new topics
-2. Add checklist items to `seo-checklist.json`
-3. Enhance agent capabilities in `seo-blog-agent.js`
-4. Update template sections in `blog-post-template.md`
+Contributions welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## License
 
-MIT License - Free to use and modify for your projects
+MIT License - Free to use and modify
 
-## Support
+## Acknowledgments
 
-For questions or issues:
-- Check the troubleshooting section in content
-- Review SEO checklist for common issues
-- Refer to keyword research for topic guidance
+- Arduino for the Nicla series boards
+- Kepware for OPC-UA connectivity
+- TensorFlow Lite for Microcontrollers
+- The open-source IoT community
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.0 (with Kepware Integration)
 **Last Updated:** 2025-01-05
 **Status:** Production Ready
